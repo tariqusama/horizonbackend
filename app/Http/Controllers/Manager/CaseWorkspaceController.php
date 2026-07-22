@@ -52,6 +52,21 @@ class CaseWorkspaceController extends Controller
             'is_admin' => true,
         ]);
 
+        \Illuminate\Support\Facades\DB::table('notifications')->insert([
+            'id' => (string) \Illuminate\Support\Str::uuid(),
+            'type' => 'App\Notifications\NewMessageNotification',
+            'notifiable_type' => 'App\Models\User',
+            'notifiable_id' => $application->user_id,
+            'data' => json_encode([
+                'title' => 'New Message',
+                'text' => 'You have received a new message regarding your application.',
+                'type' => 'message'
+            ]),
+            'read_at' => null,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         return response()->json($message, 201);
     }
 

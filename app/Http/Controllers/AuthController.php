@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\User;
+use App\Http\Middleware\AttachBearerFromCookie;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 use App\Mail\VerificationEmail;
 
 class AuthController extends Controller
@@ -45,16 +49,26 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'OTP verified successfully']);
     }
+
     public function register(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'regex:/[A-Z]/',
+                'regex:/[a-z]/',
+                'regex:/\d/',
+                'regex:/[^A-Za-z0-9]/',
+            ],
             'goal' => 'nullable|string',
             'plan' => 'nullable|string'
         ]);
 
+        /** @var \App\Models\User $user */
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -89,7 +103,13 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return response()->json($user);
+        if ($request->hasSession()) {
+            $request->session()->regenerate();
+        }
+
+        $token = $user->createToken('spa-token')->plainTextToken;
+
+        return $this->authResponse($user, $token);
     }
 
     public function login(Request $request)
@@ -99,21 +119,113 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        if (Auth::attempt($request->only('email', 'password'))) {
-            $request->session()->regenerate();
-            return response()->json(Auth::user());
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        return response()->json(['message' => 'Invalid credentials'], 401);
+        if ($request->hasSession()) {
+            $request->session()->regenerate();
+        }
+
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $token = $user->createToken('spa-token')->plainTextToken;
+
+        return $this->authResponse($user, $token);
     }
 
     public function logout(Request $request)
     {
-        Auth::guard('web')->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $request->user()?->currentAccessToken()?->delete();
 
-        return response()->json(['message' => 'Logged out successfully']);
+        Auth::guard('web')->logout();
+
+        if ($request->hasSession()) {
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
+
+        return response()->json(['message' => 'Logged out successfully'])
+            ->withCookie($this->forgetAuthCookie());
+    }
+
+    private function authResponse(User $user, string $token)
+    {
+        return response()->json($user->toArray())
+            ->withCookie($this->makeAuthCookie($token));
+    }
+
+    private function makeAuthCookie(string $token)
+    {
+        return Cookie::make(
+            AttachBearerFromCookie::COOKIE,
+            $token,
+            60 * 24 * 30,
+            '/',
+            null,
+            true,
+            true,
+            false,
+            'None'
+        );
+    }
+
+    private function forgetAuthCookie()
+    {
+        return Cookie::make(
+            AttachBearerFromCookie::COOKIE,
+            '',
+            -60,
+            '/',
+            null,
+            true,
+            true,
+            false,
+            'None'
+        );
+    }
+
+    public function sendPasswordResetLink(Request $request)
+    {
+        $email = $request->input('email');
+
+        if (!is_string($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return response()->json([
+                'message' => __('If your email is registered, a password reset link has been sent.'),
+            ]);
+        }
+
+        Password::sendResetLink(['email' => $email]);
+
+        return response()->json([
+            'message' => __('If your email is registered, a password reset link has been sent.'),
+        ]);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required|string',
+            'email' => 'required|string|email',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function (User $user, string $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password),
+                ])->setRememberToken(Str::random(60));
+
+                $user->save();
+            }
+        );
+
+        if ($status === Password::PASSWORD_RESET) {
+            return response()->json(['message' => __($status)]);
+        }
+
+        return response()->json(['message' => __($status)], 400);
     }
 
     public function user(Request $request)
@@ -121,7 +233,6 @@ class AuthController extends Controller
         $user = $request->user();
 
         // Determine which roles this authenticated user may assign.
-        // Adjust mapping below as needed for your permission model.
         $roleName = trim((string) $user->role);
         $assignable = [];
 
@@ -135,7 +246,8 @@ class AuthController extends Controller
             $assignable = [$roleName];
         }
 
-        $payload = array_merge($user->toArray(), ['assignable_roles' => $assignable]);
-        return response()->json($payload);
+        return response()->json(array_merge($user->toArray(), [
+            'assignable_roles' => $assignable,
+        ]));
     }
 }

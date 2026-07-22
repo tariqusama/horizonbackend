@@ -9,6 +9,8 @@ use App\Http\Controllers\DocumentController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/password/forgot', [AuthController::class, 'sendPasswordResetLink']);
+Route::post('/password/reset', [AuthController::class, 'resetPassword']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -35,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('/auth/send-otp', [AuthController::class, 'sendOtp']);
 Route::post('/auth/verify-otp', [AuthController::class, 'verifyOtp']);
+Route::post('/newsletter/subscribe', [\App\Http\Controllers\NewsletterController::class, 'subscribe']);
 
 Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
     Route::get('/clients', [\App\Http\Controllers\AdminController::class, 'getClients']);
