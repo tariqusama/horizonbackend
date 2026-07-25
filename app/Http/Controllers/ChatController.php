@@ -31,6 +31,16 @@ class ChatController extends Controller
             ->first();
 
         if ($application) {
+            $timeline = is_array($application->timeline) ? $application->timeline : [];
+            $timeline[] = [
+                'id' => 'msg-' . time() . '-' . uniqid(),
+                'author' => $request->user()->name . ' (Client)',
+                'text' => $request->message,
+                'created_at' => now()->toIso8601String(),
+            ];
+            $application->timeline = $timeline;
+            $application->save();
+
             \Illuminate\Support\Facades\DB::table('notifications')->insert([
                 'id' => (string) \Illuminate\Support\Str::uuid(),
                 'type' => 'App\Notifications\NewMessageNotification',
@@ -55,8 +65,8 @@ class ChatController extends Controller
                 'notifiable_type' => 'App\Models\User',
                 'notifiable_id' => $admin->id,
                 'data' => json_encode([
-                    'title' => 'New Client Message',
-                    'text' => 'Client ' . $request->user()->name . ' sent a new message.',
+                    'title' => 'Manager received a note from user',
+                    'text' => 'User ' . $request->user()->name . ' sent a note to their assigned Case Manager.',
                     'type' => 'message'
                 ]),
                 'read_at' => null,
@@ -65,36 +75,6 @@ class ChatController extends Controller
             ]);
         }
 
-        $prompt = "You are Nancy, a helpful and friendly immigration assistant for Horizon Pathways. Keep responses concise and helpful. The user says: " . $request->message;
-        
-        try {
-            $response = \Illuminate\Support\Facades\Http::timeout(15)->get('https://text.pollinations.ai/prompt/' . urlencode($prompt));
-            $aiText = $response->successful() ? $response->body() : "I'm currently experiencing high volume. Please try again later.";
-        } catch (\Exception $e) {
-            $aiText = "I'm having trouble connecting to my servers right now. Please check back soon!";
-        }
-
-        $aiMessage = \App\Models\Message::create([
-            'user_id' => $request->user()->id,
-            'message' => $aiText,
-            'is_admin' => true
-        ]);
-
-        \Illuminate\Support\Facades\DB::table('notifications')->insert([
-            'id' => (string) \Illuminate\Support\Str::uuid(),
-            'type' => 'App\Notifications\NewMessageNotification',
-            'notifiable_type' => 'App\Models\User',
-            'notifiable_id' => $request->user()->id,
-            'data' => json_encode([
-                'title' => 'New Message',
-                'text' => 'You have received a new message from Support.',
-                'type' => 'message'
-            ]),
-            'read_at' => null,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        return response()->json([$userMessage, $aiMessage], 201);
+        return response()->json($userMessage, 201);
     }
 }

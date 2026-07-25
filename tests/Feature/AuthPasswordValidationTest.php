@@ -8,7 +8,7 @@ use Tests\TestCase;
 class AuthPasswordValidationTest extends TestCase
 {
     use RefreshDatabase;
-    public function test_register_rejects_passwords_without_required_complexity(): void
+        public function test_register_rejects_passwords_without_required_complexity(): void
     {
         $response = $this->postJson('/api/register', [
             'name' => 'Test User',

@@ -30,4 +30,11 @@ class NotificationController extends Controller
 
         return response()->json(['message' => 'Notifications marked as read']);
     }
+
+    // DELETE /api/notifications/clear
+    public function clearAll(Request $request)
+    {
+        $request->user()->notifications()->delete();
+        return response()->json(['message' => 'Notifications cleared']);
+    }
 }

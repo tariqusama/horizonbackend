@@ -54,6 +54,41 @@ class RevenueController extends Controller
                 ];
             });
 
+        // Monthly Revenue (Last 6 Months for the chart)
+        $monthlyRevenue = collect(range(0, 5))->map(function ($i) {
+            $date = Carbon::now()->subMonths(5 - $i);
+            $sum = Purchase::whereYear('created_at', $date->year)
+                           ->whereMonth('created_at', $date->month)
+                           ->where('status', 'Completed')
+                           ->sum('amount');
+            return [
+                'month' => $date->format('M'),
+                'value' => (float) $sum
+            ];
+        });
+
+        // Recent Transactions (Last 10)
+        $recentTransactions = Purchase::with('service')
+            ->orderBy('created_at', 'desc')
+            ->take(10)
+            ->get()
+            ->map(function ($tx) {
+                return [
+                    'id' => 'TRX-' . $tx->id,
+                    'title' => $tx->service ? $tx->service->name : 'Custom Service',
+                    'plan' => $tx->service ? $tx->service->tier : 'Standard',
+                    'date' => $tx->created_at->format('M j, Y'),
+                    'amount' => '$' . number_format($tx->amount, 2),
+                    'status' => $tx->status
+                ];
+            });
+
+        // Conversion Funnel
+        $applicationsCreated = \App\Models\Application::count();
+        $paymentsCompleted = Purchase::where('status', 'Completed')->count();
+        $pendingPayments = Purchase::where('status', 'Pending')->count();
+        $conversionRate = $applicationsCreated > 0 ? round(($paymentsCompleted / $applicationsCreated) * 100, 1) : 0;
+
         return response()->json([
             'stats' => [
                 'total_revenue' => $currentMonthRevenue,
@@ -62,6 +97,14 @@ class RevenueController extends Controller
             ],
             'by_service' => $revenueByService,
             'by_tier' => $revenueByTier,
+            'monthly_revenue' => $monthlyRevenue,
+            'recent_transactions' => $recentTransactions,
+            'funnel_stats' => [
+                'applications_created' => $applicationsCreated,
+                'payments_completed' => $paymentsCompleted,
+                'pending_payments' => $pendingPayments,
+                'conversion_rate' => $conversionRate
+            ]
         ]);
     }
 }

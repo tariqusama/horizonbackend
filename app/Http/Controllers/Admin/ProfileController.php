@@ -26,11 +26,24 @@ class ProfileController extends Controller
             'phone' => 'nullable|string|max:20',
             'password' => 'nullable|string|min:8|confirmed',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'email_notifications' => 'sometimes|boolean',
+            'sms_alerts' => 'sometimes|boolean',
+            'marketing_emails' => 'sometimes|boolean',
         ]);
 
         $user->name = $validated['name'];
         $user->email = $validated['email'];
         $user->phone = $validated['phone'] ?? $user->phone;
+        
+        if (isset($validated['email_notifications'])) {
+            $user->email_notifications = $validated['email_notifications'];
+        }
+        if (isset($validated['sms_alerts'])) {
+            $user->sms_alerts = $validated['sms_alerts'];
+        }
+        if (isset($validated['marketing_emails'])) {
+            $user->marketing_emails = $validated['marketing_emails'];
+        }
 
         if ($request->hasFile('profile_picture')) {
             if ($user->profile_picture) {

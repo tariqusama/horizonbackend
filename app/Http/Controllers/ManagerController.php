@@ -10,24 +10,80 @@ class ManagerController extends Controller
     public function assignedCases(Request $request)
     {
         $manager = $request->user();
+        $isAdmin = str_contains(strtolower((string) $manager->role), 'admin');
+
+        if (!$manager || (!str_contains(strtolower((string) $manager->role), 'manager') && !$isAdmin)) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $query = Application::with(['user', 'manager'])->orderByDesc('created_at');
+        if (!$isAdmin) {
+            $query->where('manager_id', $manager->id);
+        }
+        $cases = $query->get();
+
+        return response()->json($cases);
+    }
+
+    public function unassignedCases(Request $request)
+    {
+        $manager = $request->user();
 
         if (!$manager || !str_contains(strtolower((string) $manager->role), 'manager')) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $cases = Application::with(['user', 'manager'])
-            ->where('manager_id', $manager->id)
+        $cases = Application::with(['user'])
+            ->whereNull('manager_id')
             ->orderByDesc('created_at')
             ->get();
 
+        $requestedCaseIds = \App\Models\AssignmentRequest::where('manager_id', $manager->id)
+            ->where('status', 'Pending')
+            ->pluck('application_id')
+            ->toArray();
+
+        $cases->each(function ($case) use ($requestedCaseIds) {
+            $case->is_requested = in_array($case->id, $requestedCaseIds);
+        });
+
         return response()->json($cases);
+    }
+
+    public function requestAssignment(Request $request, $id)
+    {
+        $manager = $request->user();
+
+        if (!$manager || !str_contains(strtolower((string) $manager->role), 'manager')) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $application = Application::whereNull('manager_id')->findOrFail($id);
+
+        $existingRequest = \App\Models\AssignmentRequest::where('application_id', $id)
+            ->where('manager_id', $manager->id)
+            ->where('status', 'Pending')
+            ->first();
+
+        if ($existingRequest) {
+            return response()->json(['message' => 'You have already requested this case.'], 400);
+        }
+
+        \App\Models\AssignmentRequest::create([
+            'application_id' => $id,
+            'manager_id' => $manager->id,
+            'status' => 'Pending',
+        ]);
+
+        return response()->json(['message' => 'Assignment requested successfully']);
     }
 
     public function updateApplication(Request $request, $id)
     {
         $manager = $request->user();
+        $isAdmin = str_contains(strtolower((string) $manager->role), 'admin');
 
-        if (!$manager || !str_contains(strtolower((string) $manager->role), 'manager')) {
+        if (!$manager || (!str_contains(strtolower((string) $manager->role), 'manager') && !$isAdmin)) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
@@ -36,13 +92,25 @@ class ManagerController extends Controller
             'progress' => 'sometimes|string',
             'next_step' => 'sometimes|string',
             'timeline' => 'sometimes|array',
+            'title' => 'sometimes|string|nullable',
+            'subtitle' => 'sometimes|string|nullable',
+            'amount' => 'sometimes|numeric|nullable',
+            'paid_amount' => 'sometimes|numeric|nullable',
+            'receipt_number' => 'sometimes|string|nullable',
+            'is_escalated' => 'sometimes|boolean',
+            'internal_notes' => 'sometimes|array|nullable',
         ]);
 
-        $application = Application::where('id', $id)
-            ->where('manager_id', $manager->id)
-            ->firstOrFail();
+        $query = Application::where('id', $id);
+        if (!$isAdmin) {
+            $query->where('manager_id', $manager->id);
+        }
+        $application = $query->firstOrFail();
 
-        $application->fill($request->only(['status', 'progress', 'next_step', 'timeline']));
+        $application->fill($request->only([
+            'status', 'progress', 'next_step', 'timeline', 
+            'title', 'package_name', 'subtitle', 'amount', 'paid_amount', 'receipt_number', 'is_escalated', 'internal_notes'
+        ]));
         $application->save();
 
         return response()->json($application->load(['user', 'manager']));

@@ -14,14 +14,17 @@ class CaseWorkspaceController extends Controller
     public function messages(Request $request, $applicationId)
     {
         $manager = $request->user();
+        $isAdmin = str_contains(strtolower((string) $manager->role), 'admin');
 
-        if (!$manager || !str_contains(strtolower((string) $manager->role), 'manager')) {
+        if (!$manager || (!str_contains(strtolower((string) $manager->role), 'manager') && !$isAdmin)) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $application = Application::where('id', $applicationId)
-            ->where('manager_id', $manager->id)
-            ->firstOrFail();
+        $query = Application::where('id', $applicationId);
+        if (!$isAdmin) {
+            $query->where('manager_id', $manager->id);
+        }
+        $application = $query->firstOrFail();
 
         $messages = Message::where('user_id', $application->user_id)
             ->orderBy('created_at', 'asc')
@@ -33,8 +36,9 @@ class CaseWorkspaceController extends Controller
     public function storeMessage(Request $request, $applicationId)
     {
         $manager = $request->user();
+        $isAdmin = str_contains(strtolower((string) $manager->role), 'admin');
 
-        if (!$manager || !str_contains(strtolower((string) $manager->role), 'manager')) {
+        if (!$manager || (!str_contains(strtolower((string) $manager->role), 'manager') && !$isAdmin)) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
@@ -42,9 +46,11 @@ class CaseWorkspaceController extends Controller
             'message' => 'required|string',
         ]);
 
-        $application = Application::where('id', $applicationId)
-            ->where('manager_id', $manager->id)
-            ->firstOrFail();
+        $query = Application::where('id', $applicationId);
+        if (!$isAdmin) {
+            $query->where('manager_id', $manager->id);
+        }
+        $application = $query->firstOrFail();
 
         $message = Message::create([
             'user_id' => $application->user_id,
@@ -73,14 +79,17 @@ class CaseWorkspaceController extends Controller
     public function documents(Request $request, $applicationId)
     {
         $manager = $request->user();
+        $isAdmin = str_contains(strtolower((string) $manager->role), 'admin');
 
-        if (!$manager || !str_contains(strtolower((string) $manager->role), 'manager')) {
+        if (!$manager || (!str_contains(strtolower((string) $manager->role), 'manager') && !$isAdmin)) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $application = Application::where('id', $applicationId)
-            ->where('manager_id', $manager->id)
-            ->firstOrFail();
+        $query = Application::where('id', $applicationId);
+        if (!$isAdmin) {
+            $query->where('manager_id', $manager->id);
+        }
+        $application = $query->firstOrFail();
 
         return response()->json($application->documents()->orderBy('created_at', 'desc')->get());
     }
@@ -88,8 +97,9 @@ class CaseWorkspaceController extends Controller
     public function requestDocuments(Request $request, $applicationId)
     {
         $manager = $request->user();
+        $isAdmin = str_contains(strtolower((string) $manager->role), 'admin');
 
-        if (!$manager || !str_contains(strtolower((string) $manager->role), 'manager')) {
+        if (!$manager || (!str_contains(strtolower((string) $manager->role), 'manager') && !$isAdmin)) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
@@ -98,9 +108,11 @@ class CaseWorkspaceController extends Controller
             'note' => 'nullable|string',
         ]);
 
-        $application = Application::where('id', $applicationId)
-            ->where('manager_id', $manager->id)
-            ->firstOrFail();
+        $query = Application::where('id', $applicationId);
+        if (!$isAdmin) {
+            $query->where('manager_id', $manager->id);
+        }
+        $application = $query->firstOrFail();
 
         $requestEntry = [
             'id' => 'req-' . time(),
@@ -126,8 +138,9 @@ class CaseWorkspaceController extends Controller
     public function escalate(Request $request, $applicationId)
     {
         $manager = $request->user();
+        $isAdmin = str_contains(strtolower((string) $manager->role), 'admin');
 
-        if (!$manager || !str_contains(strtolower((string) $manager->role), 'manager')) {
+        if (!$manager || (!str_contains(strtolower((string) $manager->role), 'manager') && !$isAdmin)) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
@@ -135,14 +148,29 @@ class CaseWorkspaceController extends Controller
             'reason' => 'required|string',
         ]);
 
-        $application = Application::where('id', $applicationId)
-            ->where('manager_id', $manager->id)
-            ->firstOrFail();
+        $query = Application::where('id', $applicationId);
+        if (!$isAdmin) {
+            $query->where('manager_id', $manager->id);
+        }
+        $application = $query->firstOrFail();
+
+        $application->is_escalated = true;
+        
+        $timeline = is_array($application->timeline) ? $application->timeline : [];
+        $timeline[] = [
+            'id' => 'esc-' . time(),
+            'author' => 'System',
+            'text' => 'Case escalated to Super Admin. Reason: ' . $request->reason,
+            'created_at' => now()->toIso8601String(),
+        ];
+        $application->timeline = $timeline;
+        $application->save();
 
         $ticket = Ticket::create([
-            'ticket_id' => 'TICKET-' . strtoupper(substr(md5(uniqid()), 0, 8)),
-            'subject' => 'Escalation for application #' . $application->id,
-            'message' => 'Escalated by manager ' . $manager->email . '. Reason: ' . $request->reason,
+            'ticket_id' => 'TKT-' . strtoupper(\Illuminate\Support\Str::random(8)),
+            'application_id' => $application->id,
+            'subject' => "Escalation for application #{$applicationId}",
+            'message' => "Escalated by manager {$manager->email}. Reason: {$request->reason}",
             'status' => 'Open',
             'priority' => 'High',
             'user_id' => $application->user_id,

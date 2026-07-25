@@ -21,9 +21,21 @@ class NewsletterController extends Controller
             $emails = array_filter(array_map('trim', explode("\n", Storage::disk('local')->get($file))));
         }
 
-        if (!in_array($email, $emails, true)) {
-            $emails[] = $email;
-            Storage::disk('local')->put($file, implode("\n", array_unique($emails)) . "\n");
+        if (in_array($email, $emails, true)) {
+            return response()->json([
+                'message' => 'You are already subscribed to our newsletter.'
+            ], 422);
+        }
+
+        $emails[] = $email;
+        Storage::disk('local')->put($file, implode("\n", array_unique($emails)) . "\n");
+
+        // Send confirmation email
+        try {
+            \Illuminate\Support\Facades\Mail::to($email)->send(new \App\Mail\NewsletterSubscribed());
+        } catch (\Exception $e) {
+            // Log the error but don't fail the request
+            \Illuminate\Support\Facades\Log::error('Failed to send newsletter subscription email: ' . $e->getMessage());
         }
 
         return response()->json(['message' => 'Thanks for subscribing!']);

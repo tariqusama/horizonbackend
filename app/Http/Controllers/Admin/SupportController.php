@@ -11,7 +11,7 @@ class SupportController extends Controller
     // GET /api/admin/tickets
     public function index()
     {
-        $tickets = Ticket::with(['user', 'assignee'])->orderBy('created_at', 'desc')->get();
+        $tickets = Ticket::with(['user', 'assignee', 'application'])->orderBy('created_at', 'desc')->get();
         return response()->json($tickets);
     }
 
@@ -26,7 +26,7 @@ class SupportController extends Controller
         $ticket->assigned_to = $validated['manager_id'];
         $ticket->save();
 
-        return response()->json(['message' => 'Ticket assigned successfully', 'ticket' => $ticket->load(['user', 'assignee'])]);
+        return response()->json(['message' => 'Ticket assigned successfully', 'ticket' => $ticket->load(['user', 'assignee', 'application'])]);
     }
 
     // PUT /api/admin/tickets/{id}/status
@@ -40,7 +40,31 @@ class SupportController extends Controller
         $ticket->status = $validated['status'];
         $ticket->save();
 
-        return response()->json(['message' => 'Ticket status updated successfully', 'ticket' => $ticket->load(['user', 'assignee'])]);
+        return response()->json(['message' => 'Ticket status updated successfully', 'ticket' => $ticket->load(['user', 'assignee', 'application'])]);
+    }
+
+    // PUT /api/admin/tickets/{id}/update-package
+    public function updatePackage(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string',
+            'amount' => 'required|numeric|min:0',
+        ]);
+
+        $ticket = Ticket::findOrFail($id);
+        
+        if ($ticket->application) {
+            $application = $ticket->application;
+            $application->title = $validated['title'];
+            $application->amount = $validated['amount'];
+            $application->is_escalated = false;
+            $application->save();
+        }
+
+        $ticket->status = 'Resolved';
+        $ticket->save();
+
+        return response()->json(['message' => 'Package updated successfully', 'ticket' => $ticket->load(['user', 'assignee', 'application'])]);
     }
 
     // POST /api/admin/tickets/{id}/reply
@@ -59,6 +83,6 @@ class SupportController extends Controller
         $ticket->status = 'In Progress';
         $ticket->save();
 
-        return response()->json(['message' => 'Reply sent successfully', 'ticket' => $ticket->load(['user', 'assignee'])]);
+        return response()->json(['message' => 'Reply sent successfully', 'ticket' => $ticket->load(['user', 'assignee', 'application'])]);
     }
 }

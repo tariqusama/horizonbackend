@@ -20,7 +20,9 @@ class AuthController extends Controller
     public function sendOtp(Request $request)
     {
         $request->validate([
-            'email' => 'required|email'
+            'email' => 'required|email|unique:users'
+        ], [
+            'email.unique' => 'Email already exists'
         ]);
 
         $otp = sprintf('%06d', mt_rand(100000, 999999));
@@ -65,7 +67,11 @@ class AuthController extends Controller
                 'regex:/[^A-Za-z0-9]/',
             ],
             'goal' => 'nullable|string',
-            'plan' => 'nullable|string'
+            'plan' => 'nullable|string',
+            'amount' => 'nullable|numeric',
+            'addons' => 'nullable|array'
+        ], [
+            'email.unique' => 'Email already exists',
         ]);
 
         /** @var \App\Models\User $user */
@@ -76,10 +82,28 @@ class AuthController extends Controller
             'role' => 'user',
         ]);
 
+        $addonsString = '';
+        if ($request->has('addons') && is_array($request->addons)) {
+            $addonItems = [];
+            foreach ($request->addons as $addon) {
+                if (is_array($addon)) {
+                    $qty = isset($addon['quantity']) && $addon['quantity'] > 1 ? ' (Qty: ' . $addon['quantity'] . ')' : '';
+                    $name = $addon['name'] ?? 'Unknown Addon';
+                    $addonItems[] = $name . $qty;
+                } else {
+                    $addonItems[] = $addon;
+                }
+            }
+            if (count($addonItems) > 0) {
+                $addonsString = ' | Addons: ' . implode(', ', $addonItems);
+            }
+        }
+
         if ($request->goal) {
             $application = $user->applications()->create([
                 'title' => $request->goal,
-                'subtitle' => 'Plan: ' . ($request->plan ?? 'Standard'),
+                'amount' => $request->amount,
+                'subtitle' => 'Plan: ' . ($request->plan ?? 'Standard') . $addonsString,
                 'status' => 'Active',
                 'progress' => 'Application received',
                 'next_step' => 'Upload supporting documents',
@@ -119,6 +143,10 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
+        if (!User::where('email', $request->email)->exists()) {
+            return response()->json(['message' => 'Email not found'], 404);
+        }
+
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
@@ -151,37 +179,39 @@ class AuthController extends Controller
 
     private function authResponse(User $user, string $token)
     {
-        return response()->json($user->toArray())
+        return response()->json(array_merge($user->toArray(), ['token' => $token]))
             ->withCookie($this->makeAuthCookie($token));
     }
 
     private function makeAuthCookie(string $token)
     {
+        $isSecure = request()->isSecure() || app()->environment('production');
         return Cookie::make(
             AttachBearerFromCookie::COOKIE,
             $token,
             60 * 24 * 30,
             '/',
             null,
-            true,
+            $isSecure,
             true,
             false,
-            'None'
+            $isSecure ? 'None' : 'Lax'
         );
     }
 
     private function forgetAuthCookie()
     {
+        $isSecure = request()->isSecure() || app()->environment('production');
         return Cookie::make(
             AttachBearerFromCookie::COOKIE,
             '',
             -60,
             '/',
             null,
-            true,
+            $isSecure,
             true,
             false,
-            'None'
+            $isSecure ? 'None' : 'Lax'
         );
     }
 
@@ -190,9 +220,11 @@ class AuthController extends Controller
         $email = $request->input('email');
 
         if (!is_string($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return response()->json([
-                'message' => __('If your email is registered, a password reset link has been sent.'),
-            ]);
+            return response()->json(['message' => 'Invalid email format'], 400);
+        }
+
+        if (!User::where('email', $email)->exists()) {
+            return response()->json(['message' => 'Email not found'], 404);
         }
 
         Password::sendResetLink(['email' => $email]);

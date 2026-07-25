@@ -14,16 +14,25 @@ class Application extends Model
         'user_id',
         'manager_id',
         'title',
+        'package_name',
+        'amount',
+        'paid_amount',
         'subtitle',
         'status',
         'progress',
         'next_step',
         'receipt_number',
-        'timeline'
+        'timeline',
+        'is_escalated',
+        'internal_notes',
+        'form_data'
     ];
 
     protected $casts = [
         'timeline' => 'array',
+        'internal_notes' => 'array',
+        'form_data' => 'array',
+        'is_escalated' => 'boolean',
     ];
 
     public function user()

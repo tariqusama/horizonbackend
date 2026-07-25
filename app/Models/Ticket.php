@@ -11,6 +11,7 @@ class Ticket extends Model
 
     protected $fillable = [
         'ticket_id',
+        'application_id',
         'subject',
         'message',
         'status',
@@ -18,6 +19,11 @@ class Ticket extends Model
         'user_id',
         'assigned_to',
     ];
+
+    public function application()
+    {
+        return $this->belongsTo(Application::class);
+    }
 
     public function user()
     {

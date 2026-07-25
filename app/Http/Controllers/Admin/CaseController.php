@@ -27,10 +27,17 @@ class CaseController extends Controller
         $application->manager_id = $validated['manager_id'];
         $application->save();
 
-        // if there's an assignment request for this, auto-approve it
+        // Approve the request for the assigned manager (if they requested it)
         AssignmentRequest::where('application_id', $id)
+            ->where('manager_id', $validated['manager_id'])
             ->where('status', 'Pending')
             ->update(['status' => 'Approved']);
+
+        // Deny all other pending requests for this application since it's now assigned
+        AssignmentRequest::where('application_id', $id)
+            ->where('manager_id', '!=', $validated['manager_id'])
+            ->where('status', 'Pending')
+            ->update(['status' => 'Denied']);
 
         return response()->json(['message' => 'Manager assigned successfully', 'application' => $application->load('manager')]);
     }
@@ -85,6 +92,12 @@ class CaseController extends Controller
             $application = $assignmentRequest->application;
             $application->manager_id = $assignmentRequest->manager_id;
             $application->save();
+
+            // Deny all other pending requests for this application
+            AssignmentRequest::where('application_id', $application->id)
+                ->where('id', '!=', $assignmentRequest->id)
+                ->where('status', 'Pending')
+                ->update(['status' => 'Denied']);
         }
 
         return response()->json(['message' => 'Request updated successfully', 'request' => $assignmentRequest->load(['application.user', 'manager'])]);

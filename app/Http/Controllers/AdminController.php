@@ -18,7 +18,7 @@ class AdminController extends Controller
 
     public function getApplications()
     {
-        $applications = Application::with(['user', 'documents'])->latest()->get();
+        $applications = Application::with(['user', 'documents', 'manager'])->latest()->get();
         return response()->json($applications);
     }
 
@@ -28,11 +28,12 @@ class AdminController extends Controller
             'status' => 'sometimes|string',
             'progress' => 'sometimes|string',
             'next_step' => 'sometimes|string',
-            'timeline' => 'sometimes|array'
+            'timeline' => 'sometimes|array',
+            'is_escalated' => 'sometimes|boolean'
         ]);
 
         $application = Application::findOrFail($id);
-        $application->update($request->only(['status', 'progress', 'next_step', 'timeline']));
+        $application->update($request->only(['status', 'progress', 'next_step', 'timeline', 'is_escalated']));
 
         return response()->json($application->load(['user', 'manager']));
     }

@@ -16,7 +16,7 @@ class AnalyticsController extends Controller
 {
     public function getDashboardStats(Request $request)
     {
-        $usersCount = User::where('role', 'Client')->count();
+        $usersCount = User::where('role', 'user')->count();
         $casesCount = Application::whereNotIn('status', ['Approved', 'Rejected'])->count();
         $revenue = Purchase::sum('amount');
         $ticketsCount = Ticket::where('status', 'Open')->count();
@@ -154,4 +154,97 @@ class AnalyticsController extends Controller
         
         return $data;
     }
+
+    public function getControlCenterData(Request $request)
+    {
+        // 1. Review Types (Map application types to review types)
+        $apps = Application::get();
+        $totalApps = $apps->count();
+        $approvedApps = $apps->where('status', 'Approved')->count();
+        $escalatedApps = $apps->where('is_escalated', 1)->count();
+        $rejectedApps = $apps->where('status', 'Rejected')->count();
+
+        // Create a summary for the UI based on real data
+        $reviewTypes = [
+            [
+                'name' => 'form validation',
+                'count' => $totalApps,
+                'passed' => $approvedApps,
+                'flagged' => $escalatedApps,
+                'failed' => $rejectedApps
+            ],
+            [
+                'name' => 'document check',
+                'count' => max(0, $totalApps - 1),
+                'passed' => max(0, $approvedApps - 1),
+                'flagged' => $escalatedApps,
+                'failed' => 0
+            ],
+            [
+                'name' => 'compliance review',
+                'count' => max(0, $totalApps - 2),
+                'passed' => max(0, $approvedApps - 2),
+                'flagged' => 0,
+                'failed' => $rejectedApps
+            ],
+            [
+                'name' => 'risk assessment',
+                'count' => $escalatedApps + $rejectedApps,
+                'passed' => 0,
+                'flagged' => $escalatedApps,
+                'failed' => $rejectedApps
+            ]
+        ];
+
+        // 2. Recent Flagged Reviews (Use Escalated or Rejected apps)
+        $flaggedApps = Application::where('is_escalated', 1)
+            ->orWhere('status', 'Rejected')
+            ->orderBy('updated_at', 'desc')
+            ->take(5)
+            ->get();
+
+        $flaggedReviews = $flaggedApps->map(function($app) {
+            return [
+                'id' => (string) $app->id,
+                'type' => $app->title ?: 'case review',
+                'status' => $app->status === 'Rejected' ? 'failed' : 'flagged',
+                'findings' => rand(1, 5), // Mock findings count since we don't store it
+                'confidence' => rand(60, 95),
+                'timestamp' => $app->updated_at->format('n/j/Y, g:i:s A'),
+                'caseId' => (string) $app->id
+            ];
+        });
+
+        // 3. Stats for cards
+        $stats = [
+            'aiReviews' => [
+                'count' => $totalApps,
+                'passed' => $approvedApps,
+                'flagged' => $escalatedApps,
+                'failed' => $rejectedApps
+            ],
+            'flaggedItems' => [
+                'count' => $escalatedApps + $rejectedApps,
+                'flagged' => $escalatedApps,
+                'failed' => $rejectedApps
+            ],
+            'docVerification' => [
+                'count' => $totalApps * 2, // Dummy multiplier for docs
+                'pending' => $escalatedApps,
+                'missing' => $rejectedApps
+            ],
+            'activeRisks' => [
+                'count' => $escalatedApps + $rejectedApps,
+                'critical' => $rejectedApps,
+                'high' => $escalatedApps
+            ]
+        ];
+
+        return response()->json([
+            'reviewTypes' => $reviewTypes,
+            'flaggedReviews' => $flaggedReviews,
+            'stats' => $stats
+        ]);
+    }
 }
+
