@@ -16,7 +16,7 @@ class ManagerController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $query = Application::with(['user', 'manager'])->orderByDesc('created_at');
+        $query = Application::with(['user', 'manager', 'documents'])->orderByDesc('created_at');
         if (!$isAdmin) {
             $query->where('manager_id', $manager->id);
         }
@@ -108,8 +108,18 @@ class ManagerController extends Controller
         $application = $query->firstOrFail();
 
         $application->fill($request->only([
-            'status', 'progress', 'next_step', 'timeline', 
-            'title', 'package_name', 'subtitle', 'amount', 'paid_amount', 'receipt_number', 'is_escalated', 'internal_notes'
+            'status',
+            'progress',
+            'next_step',
+            'timeline',
+            'title',
+            'package_name',
+            'subtitle',
+            'amount',
+            'paid_amount',
+            'receipt_number',
+            'is_escalated',
+            'internal_notes'
         ]));
         $application->save();
 

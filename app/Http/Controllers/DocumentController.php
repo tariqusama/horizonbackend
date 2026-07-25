@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Document;
+use App\Models\Application;
 use Illuminate\Support\Facades\Storage;
 
 class DocumentController extends Controller
@@ -13,17 +14,107 @@ class DocumentController extends Controller
      */
     public function index(Request $request)
     {
-        $application = $request->user()->applications()->latest()->first();
+        $user = $request->user();
+        $application = $user->applications()->latest()->first();
 
         if (!$application) {
-            return response()->json([]);
+            $application = Application::create([
+                'user_id' => $user->id,
+                'title' => 'Green Card Application (I-90 / I-130)',
+                'subtitle' => 'Basic Plan',
+                'status' => 'Pending',
+                'progress' => '25%'
+            ]);
         }
 
-        return response()->json($application->documents);
+        // Standard required document checklist
+        $defaultDocs = [
+            'Passport photo page',
+            'Birth certificate',
+            'Proof of residency',
+            'Medical exam report',
+            'Affidavit of support',
+            'Government Issued Photo ID',
+            'Permanent Resident Card',
+            'Signed Statement'
+        ];
+
+        foreach ($defaultDocs as $docName) {
+            Document::firstOrCreate(
+                [
+                    'application_id' => $application->id,
+                    'name' => $docName,
+                ],
+                [
+                    'status' => 'Missing',
+                    'file_path' => null
+                ]
+            );
+        }
+
+        $documents = Document::where('application_id', $application->id)->get();
+        return response()->json($documents);
     }
 
     /**
-     * Upload a document
+     * Upload / Store a document for active application
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|max:10240', // 10MB max
+            'doc_type' => 'nullable|string',
+            'name' => 'nullable|string'
+        ]);
+
+        $user = $request->user();
+        $application = $user->applications()->latest()->first();
+
+        if (!$application) {
+            $application = Application::create([
+                'user_id' => $user->id,
+                'title' => 'Green Card Application (I-90 / I-130)',
+                'subtitle' => 'Basic Plan',
+                'status' => 'Pending',
+                'progress' => '25%'
+            ]);
+        }
+
+        $docNameMap = [
+            'prCard' => 'Permanent Resident Card',
+            'photoId' => 'Government Issued Photo ID',
+            'birthCert' => 'Birth Certificate',
+            'policeReport' => 'Police Report',
+            'statement' => 'Signed Statement',
+            'marriageCert' => 'Marriage Certificate',
+            'divorceDecree' => 'Divorce Decree',
+            'courtOrder' => 'Court Order',
+            'residenceEvidence' => 'Residence Evidence',
+            'priorCard' => 'Prior Green Card Copy',
+            'otherDocs' => 'Supporting Evidence'
+        ];
+
+        $docType = $request->input('doc_type');
+        $docName = $request->input('name') ?: ($docNameMap[$docType] ?? ($docType ?: 'Uploaded Document'));
+
+        $path = $request->file('file')->store('public/documents');
+
+        $document = Document::updateOrCreate(
+            [
+                'application_id' => $application->id,
+                'name' => $docName,
+            ],
+            [
+                'status' => 'Uploaded',
+                'file_path' => $path
+            ]
+        );
+
+        return response()->json($document);
+    }
+
+    /**
+     * Upload a file for an existing document record
      */
     public function upload(Request $request, $id)
     {
@@ -33,7 +124,6 @@ class DocumentController extends Controller
 
         $document = Document::findOrFail($id);
 
-        // Ensure the document belongs to the user's application
         if ($document->application->user_id !== $request->user()->id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
@@ -48,3 +138,4 @@ class DocumentController extends Controller
         return response()->json($document);
     }
 }
+

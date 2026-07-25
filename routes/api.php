@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/applications/{id}/n400', [ApplicationController::class, 'saveN400']);
     Route::post('/applications/{id}/submit', [ApplicationController::class, 'submit']);
     Route::get('/documents', [DocumentController::class, 'index']);
+    Route::post('/documents/upload', [DocumentController::class, 'store']);
     Route::post('/documents/{id}/upload', [DocumentController::class, 'upload']);
     Route::get('/messages', [\App\Http\Controllers\ChatController::class, 'index']);
     Route::post('/messages', [\App\Http\Controllers\ChatController::class, 'store']);
