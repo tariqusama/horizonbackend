@@ -93,6 +93,7 @@ class ManagerController extends Controller
             'next_step' => 'sometimes|string',
             'timeline' => 'sometimes|array',
             'title' => 'sometimes|string|nullable',
+            'package_name' => 'sometimes|string|nullable',
             'subtitle' => 'sometimes|string|nullable',
             'amount' => 'sometimes|numeric|nullable',
             'paid_amount' => 'sometimes|numeric|nullable',

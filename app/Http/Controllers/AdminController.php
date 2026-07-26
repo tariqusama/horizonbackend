@@ -29,11 +29,20 @@ class AdminController extends Controller
             'progress' => 'sometimes|string',
             'next_step' => 'sometimes|string',
             'timeline' => 'sometimes|array',
-            'is_escalated' => 'sometimes|boolean'
+            'is_escalated' => 'sometimes|boolean',
+            'title' => 'sometimes|string',
+            'package_name' => 'sometimes|nullable|string',
+            'subtitle' => 'sometimes|nullable|string',
+            'amount' => 'sometimes|numeric',
+            'paid_amount' => 'sometimes|numeric',
+            'receipt_number' => 'sometimes|nullable|string',
         ]);
 
         $application = Application::findOrFail($id);
-        $application->update($request->only(['status', 'progress', 'next_step', 'timeline', 'is_escalated']));
+        $application->update($request->only([
+            'status', 'progress', 'next_step', 'timeline', 'is_escalated',
+            'title', 'package_name', 'subtitle', 'amount', 'paid_amount', 'receipt_number'
+        ]));
 
         return response()->json($application->load(['user', 'manager']));
     }

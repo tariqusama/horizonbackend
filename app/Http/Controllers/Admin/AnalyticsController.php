@@ -18,14 +18,14 @@ class AnalyticsController extends Controller
     {
         $usersCount = User::where('role', 'user')->count();
         $casesCount = Application::whereNotIn('status', ['Approved', 'Rejected'])->count();
-        $revenue = Purchase::sum('amount');
+        $revenue = Application::sum('paid_amount');
         $ticketsCount = Ticket::where('status', 'Open')->count();
 
         // Generate dummy sparkline data for UI (or we could calculate it historically)
         // Here we just calculate historically by week for the last 7 weeks
         $usersSparkline = $this->generateSparkline(User::class, 'created_at', 7);
         $casesSparkline = $this->generateSparkline(Application::class, 'created_at', 7);
-        $revenueSparkline = $this->generateSparkline(Purchase::class, 'created_at', 7, 'amount');
+        $revenueSparkline = $this->generateSparkline(Application::class, 'created_at', 7, 'paid_amount');
         $ticketsSparkline = $this->generateSparkline(Ticket::class, 'created_at', 7);
 
         return response()->json([
@@ -74,9 +74,9 @@ class AnalyticsController extends Controller
         // 1. Monthly Revenue (Last 12 Months)
         $monthlyRevenue = collect(range(0, 11))->map(function ($i) {
             $date = Carbon::now()->subMonths(11 - $i);
-            $sum = Purchase::whereYear('created_at', $date->year)
+            $sum = Application::whereYear('created_at', $date->year)
                            ->whereMonth('created_at', $date->month)
-                           ->sum('amount');
+                           ->sum('paid_amount');
             return [
                 'month' => $date->format('M'),
                 'revenue' => $sum

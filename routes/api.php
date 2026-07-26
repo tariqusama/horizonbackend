@@ -35,6 +35,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/documents', [DocumentController::class, 'index']);
     Route::post('/documents/upload', [DocumentController::class, 'store']);
     Route::post('/documents/{id}/upload', [DocumentController::class, 'upload']);
+    
+    Route::get('/checklists', [\App\Http\Controllers\ChecklistController::class, 'index']);
+    
     Route::get('/messages', [\App\Http\Controllers\ChatController::class, 'index']);
     Route::post('/messages', [\App\Http\Controllers\ChatController::class, 'store']);
     Route::get('/notifications', [\App\Http\Controllers\Admin\NotificationController::class, 'index']);

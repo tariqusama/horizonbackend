@@ -18,38 +18,36 @@ class RevenueController extends Controller
         $startOfLastMonth = $now->copy()->subMonth()->startOfMonth();
         $endOfLastMonth = $now->copy()->subMonth()->endOfMonth();
 
-        $currentMonthRevenue = Purchase::whereBetween('created_at', [$startOfMonth, $now])->sum('amount');
-        $lastMonthRevenue = Purchase::whereBetween('created_at', [$startOfLastMonth, $endOfLastMonth])->sum('amount');
+        $currentMonthRevenue = \App\Models\Application::whereBetween('created_at', [$startOfMonth, $now])->sum('paid_amount');
+        $lastMonthRevenue = \App\Models\Application::whereBetween('created_at', [$startOfLastMonth, $endOfLastMonth])->sum('paid_amount');
         
         $revenueGrowth = 0;
         if ($lastMonthRevenue > 0) {
             $revenueGrowth = (($currentMonthRevenue - $lastMonthRevenue) / $lastMonthRevenue) * 100;
         }
 
-        $activeSubscriptions = Purchase::where('status', 'Completed')->count();
+        $activeSubscriptions = \App\Models\Application::where('paid_amount', '>', 0)->count();
 
         // Revenue by Service (for chart)
-        $revenueByService = Purchase::select('service_id', DB::raw('SUM(amount) as total'))
-            ->where('status', 'Completed')
-            ->groupBy('service_id')
-            ->with('service')
+        $revenueByService = \App\Models\Application::select('title as service', DB::raw('SUM(paid_amount) as total'))
+            ->where('paid_amount', '>', 0)
+            ->groupBy('title')
             ->get()
             ->map(function ($item) {
                 return [
-                    'service' => $item->service ? $item->service->name : 'Unknown',
+                    'service' => $item->service ?: 'Unknown',
                     'revenue' => (float) $item->total,
                 ];
             });
 
         // Revenue by Tier (for chart)
-        $revenueByTier = Purchase::select('services.tier', DB::raw('SUM(purchases.amount) as total'))
-            ->join('services', 'purchases.service_id', '=', 'services.id')
-            ->where('purchases.status', 'Completed')
-            ->groupBy('services.tier')
+        $revenueByTier = \App\Models\Application::select('package_name as tier', DB::raw('SUM(paid_amount) as total'))
+            ->where('paid_amount', '>', 0)
+            ->groupBy('package_name')
             ->get()
             ->map(function ($item) {
                 return [
-                    'tier' => $item->tier,
+                    'tier' => $item->tier ?: 'Standard',
                     'revenue' => (float) $item->total,
                 ];
             });
@@ -57,10 +55,10 @@ class RevenueController extends Controller
         // Monthly Revenue (Last 6 Months for the chart)
         $monthlyRevenue = collect(range(0, 5))->map(function ($i) {
             $date = Carbon::now()->subMonths(5 - $i);
-            $sum = Purchase::whereYear('created_at', $date->year)
+            $sum = \App\Models\Application::whereYear('created_at', $date->year)
                            ->whereMonth('created_at', $date->month)
-                           ->where('status', 'Completed')
-                           ->sum('amount');
+                           ->where('paid_amount', '>', 0)
+                           ->sum('paid_amount');
             return [
                 'month' => $date->format('M'),
                 'value' => (float) $sum
@@ -68,26 +66,64 @@ class RevenueController extends Controller
         });
 
         // Recent Transactions (Last 10)
-        $recentTransactions = Purchase::with('service')
-            ->orderBy('created_at', 'desc')
+        $recentTransactions = \App\Models\Application::orderBy('created_at', 'desc')
+            ->where('paid_amount', '>', 0)
             ->take(10)
             ->get()
             ->map(function ($tx) {
                 return [
                     'id' => 'TRX-' . $tx->id,
-                    'title' => $tx->service ? $tx->service->name : 'Custom Service',
-                    'plan' => $tx->service ? $tx->service->tier : 'Standard',
+                    'title' => $tx->title ?: 'Custom Service',
+                    'plan' => $tx->package_name ?: 'Standard',
                     'date' => $tx->created_at->format('M j, Y'),
-                    'amount' => '$' . number_format($tx->amount, 2),
-                    'status' => $tx->status
+                    'amount' => '$' . number_format($tx->paid_amount, 2),
+                    'status' => 'Completed'
                 ];
             });
 
         // Conversion Funnel
         $applicationsCreated = \App\Models\Application::count();
-        $paymentsCompleted = Purchase::where('status', 'Completed')->count();
-        $pendingPayments = Purchase::where('status', 'Pending')->count();
+        $paymentsCompleted = \App\Models\Application::where('paid_amount', '>', 0)->count();
+        $pendingPayments = \App\Models\Application::where(function($q) {
+            $q->whereNull('paid_amount')->orWhere('paid_amount', '<=', 0);
+        })->count();
         $conversionRate = $applicationsCreated > 0 ? round(($paymentsCompleted / $applicationsCreated) * 100, 1) : 0;
+
+        // Performance Leaderboard
+        $managers = \App\Models\User::whereIn('role', ['manager', 'admin'])->get();
+        $leaderboard = $managers->map(function ($manager) {
+            $completed = \App\Models\Application::where('manager_id', $manager->id)->where('progress', 'Completed')->count();
+            $active = \App\Models\Application::where('manager_id', $manager->id)->where('progress', '!=', 'Completed')->count();
+            
+            // Calculate avg completion time (in days)
+            $completedApps = \App\Models\Application::where('manager_id', $manager->id)->where('progress', 'Completed')->get();
+            $avgDays = 0;
+            if ($completedApps->count() > 0) {
+                $totalDays = 0;
+                foreach ($completedApps as $app) {
+                    $totalDays += $app->created_at->diffInDays($app->updated_at);
+                }
+                $avgDays = round($totalDays / $completedApps->count());
+            }
+
+            // Calculate percentage (e.g. win rate or just a placeholder)
+            $total = $completed + $active;
+            $percent = $total > 0 ? round(($completed / $total) * 100) : 0;
+
+            return [
+                'name' => $manager->name,
+                'role' => $manager->role === 'admin' ? 'immigration attorney' : 'case manager',
+                'completed' => $completed,
+                'active' => $active,
+                'avg' => $avgDays . 'd avg',
+                'percent' => $percent,
+            ];
+        })->filter(function ($item) {
+            return $item['completed'] > 0 || $item['active'] > 0;
+        })->sortByDesc('completed')->values()->map(function ($item, $index) {
+            $item['rank'] = $index + 1;
+            return $item;
+        });
 
         return response()->json([
             'stats' => [
@@ -104,7 +140,8 @@ class RevenueController extends Controller
                 'payments_completed' => $paymentsCompleted,
                 'pending_payments' => $pendingPayments,
                 'conversion_rate' => $conversionRate
-            ]
+            ],
+            'leaderboard' => $leaderboard
         ]);
     }
 }

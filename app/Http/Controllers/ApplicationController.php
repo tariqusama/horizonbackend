@@ -22,10 +22,12 @@ class ApplicationController extends Controller
             'goal' => 'required|string',
             'plan' => 'required|string',
             'amount' => 'required|numeric',
+            'package_name' => 'sometimes|string',
         ]);
 
         $application = $request->user()->applications()->create([
             'title' => $request->goal,
+            'package_name' => $request->package_name ?? $request->goal,
             'amount' => $request->amount,
             'paid_amount' => $request->amount, // Since they just paid
             'subtitle' => 'Plan: ' . $request->plan,
@@ -39,14 +41,6 @@ class ApplicationController extends Controller
                 ['step' => 'Evidence review', 'description' => 'Your documents will be under review.', 'complete' => false],
                 ['step' => 'Decision pending', 'description' => 'USCIS will issue a decision.', 'complete' => false]
             ]
-        ]);
-
-        $application->documents()->createMany([
-            ['name' => 'Passport photo page', 'status' => 'Missing'],
-            ['name' => 'Birth certificate', 'status' => 'Missing'],
-            ['name' => 'Proof of residency', 'status' => 'Missing'],
-            ['name' => 'Medical exam report', 'status' => 'Missing'],
-            ['name' => 'Affidavit of support', 'status' => 'Missing'],
         ]);
 
         return response()->json([
