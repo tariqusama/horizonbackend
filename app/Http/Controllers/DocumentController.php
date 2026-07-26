@@ -97,7 +97,10 @@ class DocumentController extends Controller
         $docType = $request->input('doc_type');
         $docName = $request->input('name') ?: ($docNameMap[$docType] ?? ($docType ?: 'Uploaded Document'));
 
-        $path = $request->file('file')->store('public/documents');
+        $file = $request->file('file');
+        $filename = $file->hashName();
+        $file->storeAs('documents', $filename, 'public');
+        $path = 'documents/' . $filename;
 
         $document = Document::updateOrCreate(
             [
@@ -128,7 +131,10 @@ class DocumentController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $path = $request->file('file')->store('public/documents');
+        $file = $request->file('file');
+        $filename = $file->hashName();
+        $file->storeAs('documents', $filename, 'public');
+        $path = 'documents/' . $filename;
 
         $document->update([
             'status' => 'Uploaded',
