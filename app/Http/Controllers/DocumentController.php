@@ -27,30 +27,6 @@ class DocumentController extends Controller
             ]);
         }
 
-        // Standard required document checklist
-        $defaultDocs = [
-            'Passport photo page',
-            'Birth certificate',
-            'Proof of residency',
-            'Medical exam report',
-            'Affidavit of support',
-            'Government Issued Photo ID',
-            'Permanent Resident Card',
-            'Signed Statement'
-        ];
-
-        foreach ($defaultDocs as $docName) {
-            Document::firstOrCreate(
-                [
-                    'application_id' => $application->id,
-                    'name' => $docName,
-                ],
-                [
-                    'status' => 'Missing',
-                    'file_path' => null
-                ]
-            );
-        }
 
         $documents = Document::where('application_id', $application->id)->get();
         return response()->json($documents);
