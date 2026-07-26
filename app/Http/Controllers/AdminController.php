@@ -36,12 +36,13 @@ class AdminController extends Controller
             'amount' => 'sometimes|numeric',
             'paid_amount' => 'sometimes|numeric',
             'receipt_number' => 'sometimes|nullable|string',
+            'form_data' => 'sometimes|nullable|array',
         ]);
 
         $application = Application::findOrFail($id);
         $application->update($request->only([
             'status', 'progress', 'next_step', 'timeline', 'is_escalated',
-            'title', 'package_name', 'subtitle', 'amount', 'paid_amount', 'receipt_number'
+            'title', 'package_name', 'subtitle', 'amount', 'paid_amount', 'receipt_number', 'form_data'
         ]));
 
         return response()->json($application->load(['user', 'manager']));

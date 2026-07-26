@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Mail\PaymentReceived;
+use App\Mail\AdminNotification;
+use Illuminate\Support\Facades\Mail;
+use App\Models\User;
 
 class PaymentController extends Controller
 {
@@ -104,6 +108,16 @@ class PaymentController extends Controller
                 $application->progress = 'Documents Needed';
             }
             $application->save();
+
+            try {
+                Mail::to($request->user()->email)->send(new PaymentReceived($application, $application->amount));
+                $admins = User::where('role', 'admin')->get();
+                foreach ($admins as $admin) {
+                    Mail::to($admin->email)->send(new AdminNotification('Payment Received', 'A payment of $' . number_format($application->amount, 2) . ' was received from ' . $request->user()->name));
+                }
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Payment email failed: ' . $e->getMessage());
+            }
         }
         return response()->json(['status' => 'success']);
     }

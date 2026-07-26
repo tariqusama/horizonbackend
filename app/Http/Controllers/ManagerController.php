@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CaseUpdated;
 
 class ManagerController extends Controller
 {
@@ -100,6 +102,7 @@ class ManagerController extends Controller
             'receipt_number' => 'sometimes|string|nullable',
             'is_escalated' => 'sometimes|boolean',
             'internal_notes' => 'sometimes|array|nullable',
+            'form_data' => 'sometimes|array|nullable',
         ]);
 
         $query = Application::where('id', $id);
@@ -120,9 +123,20 @@ class ManagerController extends Controller
             'paid_amount',
             'receipt_number',
             'is_escalated',
-            'internal_notes'
+            'internal_notes',
+            'form_data'
         ]));
+        
+        $changes = $application->getDirty();
         $application->save();
+
+        if (!empty($changes) && $application->user) {
+            try {
+                Mail::to($application->user->email)->send(new CaseUpdated($application, $changes));
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Case updated email failed: ' . $e->getMessage());
+            }
+        }
 
         return response()->json($application->load(['user', 'manager']));
     }

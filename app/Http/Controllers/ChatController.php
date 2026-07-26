@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewMessage;
 
 class ChatController extends Controller
 {
@@ -55,6 +57,18 @@ class ChatController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
+            try {
+                $managerUser = \App\Models\User::find($application->manager_id);
+                if ($managerUser) {
+                    Mail::to($managerUser->email)->send(new NewMessage([
+                        'sender_name' => $request->user()->name . ' (Client)',
+                        'message' => $request->message
+                    ]));
+                }
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('New message email to manager failed: ' . $e->getMessage());
+            }
         }
 
         $admins = \App\Models\User::where('role', 'admin')->get();
@@ -73,6 +87,15 @@ class ChatController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
+            try {
+                Mail::to($admin->email)->send(new NewMessage([
+                    'sender_name' => $request->user()->name,
+                    'message' => 'User ' . $request->user()->name . ' sent a note to their assigned Case Manager.'
+                ]));
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('New message email to admin failed: ' . $e->getMessage());
+            }
         }
 
         return response()->json($userMessage, 201);

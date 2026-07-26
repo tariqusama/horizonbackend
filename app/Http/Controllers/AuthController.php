@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use App\Mail\VerificationEmail;
+use App\Mail\UserRegistered;
+use App\Mail\AdminNotification;
 
 class AuthController extends Controller
 {
@@ -81,6 +83,16 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'role' => 'user',
         ]);
+
+        try {
+            Mail::to($user->email)->send(new UserRegistered($user));
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                Mail::to($admin->email)->send(new AdminNotification('New User Registered', 'A new user has registered: ' . $user->name));
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Registration email failed: ' . $e->getMessage());
+        }
 
         $addonsString = '';
         if ($request->has('addons') && is_array($request->addons)) {
