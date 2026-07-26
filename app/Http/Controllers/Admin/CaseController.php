@@ -20,24 +20,26 @@ class CaseController extends Controller
     public function assignManager(Request $request, $id)
     {
         $validated = $request->validate([
-            'manager_id' => 'required|exists:users,id',
+            'manager_id' => 'nullable|exists:users,id',
         ]);
 
         $application = Application::findOrFail($id);
         $application->manager_id = $validated['manager_id'];
         $application->save();
 
-        // Approve the request for the assigned manager (if they requested it)
-        AssignmentRequest::where('application_id', $id)
-            ->where('manager_id', $validated['manager_id'])
-            ->where('status', 'Pending')
-            ->update(['status' => 'Approved']);
+        if ($validated['manager_id']) {
+            // Approve the request for the assigned manager (if they requested it)
+            AssignmentRequest::where('application_id', $id)
+                ->where('manager_id', $validated['manager_id'])
+                ->where('status', 'Pending')
+                ->update(['status' => 'Approved']);
 
-        // Deny all other pending requests for this application since it's now assigned
-        AssignmentRequest::where('application_id', $id)
-            ->where('manager_id', '!=', $validated['manager_id'])
-            ->where('status', 'Pending')
-            ->update(['status' => 'Denied']);
+            // Deny all other pending requests for this application since it's now assigned
+            AssignmentRequest::where('application_id', $id)
+                ->where('manager_id', '!=', $validated['manager_id'])
+                ->where('status', 'Pending')
+                ->update(['status' => 'Denied']);
+        }
 
         return response()->json(['message' => 'Manager assigned successfully', 'application' => $application->load('manager')]);
     }
