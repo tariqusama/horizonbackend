@@ -19,13 +19,29 @@ class ChatController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'message' => 'required|string'
+            'message' => 'nullable|string',
+            'file' => 'nullable|file|max:10240' // 10MB max
         ]);
+
+        if (!$request->message && !$request->file('file')) {
+            return response()->json(['message' => 'Message or file is required'], 422);
+        }
+
+        $attachmentPath = null;
+        $attachmentName = null;
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $attachmentName = $file->getClientOriginalName();
+            $attachmentPath = $file->store('messages/attachments', 'public');
+        }
 
         $userMessage = \App\Models\Message::create([
             'user_id' => $request->user()->id,
-            'message' => $request->message,
-            'is_admin' => false
+            'message' => $request->message ?? '',
+            'is_admin' => false,
+            'attachment_path' => $attachmentPath,
+            'attachment_name' => $attachmentName,
         ]);
 
         $application = \App\Models\Application::where('user_id', $request->user()->id)

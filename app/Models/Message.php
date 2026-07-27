@@ -12,7 +12,9 @@ class Message extends Model
     protected $fillable = [
         'user_id',
         'message',
-        'is_admin'
+        'is_admin',
+        'attachment_path',
+        'attachment_name'
     ];
 
     public function user()

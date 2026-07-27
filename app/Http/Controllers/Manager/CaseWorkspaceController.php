@@ -43,8 +43,13 @@ class CaseWorkspaceController extends Controller
         }
 
         $request->validate([
-            'message' => 'required|string',
+            'message' => 'nullable|string',
+            'file' => 'nullable|file|max:10240' // 10MB max
         ]);
+
+        if (!$request->message && !$request->file('file')) {
+            return response()->json(['message' => 'Message or file is required'], 422);
+        }
 
         $query = Application::where('id', $applicationId);
         if (!$isAdmin) {
@@ -52,10 +57,21 @@ class CaseWorkspaceController extends Controller
         }
         $application = $query->firstOrFail();
 
+        $attachmentPath = null;
+        $attachmentName = null;
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $attachmentName = $file->getClientOriginalName();
+            $attachmentPath = $file->store('messages/attachments', 'public');
+        }
+
         $message = Message::create([
             'user_id' => $application->user_id,
-            'message' => $request->message,
+            'message' => $request->message ?? '',
             'is_admin' => true,
+            'attachment_path' => $attachmentPath,
+            'attachment_name' => $attachmentName,
         ]);
 
         \Illuminate\Support\Facades\DB::table('notifications')->insert([
