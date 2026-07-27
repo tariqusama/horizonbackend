@@ -10,6 +10,7 @@ class ChecklistSeeder extends Seeder
     /**
      * Run the database seeds.
      */
+
     public function run(): void
     {
         $json = file_get_contents(__DIR__ . '/checklists.json');
@@ -24,12 +25,12 @@ class ChecklistSeeder extends Seeder
             \App\Models\Checklist::updateOrCreate(
                 ['key' => $key],
                 [
-                    'title'           => $checklist['title'] ?? '',
-                    'subtitle'        => $checklist['subtitle'] ?? null,
-                    'description'     => $checklist['description'] ?? null,
-                    'forms'           => $checklist['forms'] ?? [],
+                    'title' => $checklist['title'] ?? '',
+                    'subtitle' => $checklist['subtitle'] ?? null,
+                    'description' => $checklist['description'] ?? null,
+                    'forms' => $checklist['forms'] ?? [],
                     'total_documents' => $checklist['totalDocuments'] ?? 0,
-                    'sections'        => $checklist['sections'] ?? []
+                    'sections' => $checklist['sections'] ?? []
                 ]
             );
         }
