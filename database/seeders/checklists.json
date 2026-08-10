@@ -16,11 +16,13 @@
         "documents": [
           {
             "name": "Proof of U.S. citizenship OR green card (front and back)",
-            "required": true
+            "required": true,
+            "hint": "U.S. citizens: upload your U.S. passport bio page, U.S. birth certificate, Certificate of Naturalization, or Certificate of Citizenship. Green card holders: upload a clear scan of both the FRONT and BACK of your Permanent Resident Card (I-551)."
           },
           {
             "name": "Government-issued photo ID (passport, driver's license, etc.)",
-            "required": true
+            "required": true,
+            "hint": "Upload a valid state driver's license, state ID card, or U.S. passport. The document must show your full legal name, date of birth, and photo."
           }
         ]
       },
@@ -29,11 +31,13 @@
         "documents": [
           {
             "name": "Birth certificate (certified translation if not in English)",
-            "required": true
+            "required": true,
+            "hint": "Upload the official birth certificate issued by the country of birth. If it is not in English, you must also upload a certified English translation. The translation must be complete and include a translator's certification statement."
           },
           {
             "name": "Passport biographic page",
-            "required": true
+            "required": true,
+            "hint": "Upload a scan or photo of the passport page that shows the beneficiary's full name, date of birth, nationality, passport number, and photo. The passport must be valid."
           }
         ]
       },
@@ -42,19 +46,23 @@
         "documents": [
           {
             "name": "Marriage certificate (original or certified copy)",
-            "required": true
+            "required": true,
+            "hint": "Upload the official marriage certificate issued by the government or civil authority where the marriage took place. If not in English, a certified translation is required."
           },
           {
             "name": "Proof of termination of all prior marriages (if applicable)",
-            "required": false
+            "required": false,
+            "hint": "If either spouse was previously married, upload divorce decrees, annulment documents, or death certificates for each prior marriage. These must be official court or government records."
           },
           {
             "name": "Photos together over time, labeled with dates/locations",
-            "required": true
+            "required": true,
+            "hint": "Upload a collection of dated photos showing you and your spouse together over different time periods and locations. Photos should ideally show you in various settings — holidays, family events, everyday life. Label each photo with the date and location."
           },
           {
             "name": "Birth certificates of children born to the marriage (if any)",
-            "required": false
+            "required": false,
+            "hint": "If you have children together, upload official birth certificates for each child showing both parents' names. Include certified translations if they are not in English."
           }
         ]
       },
@@ -63,35 +71,43 @@
         "documents": [
           {
             "name": "Proof of ongoing relationship (money transfers, shared accounts, etc.)",
-            "required": false
+            "required": false,
+            "hint": "Examples: bank transfer receipts showing you send money to your spouse, shared joint bank account statements, or evidence of shared finances. Screenshots of wire transfers or remittance apps (e.g., Western Union, Remitly) are acceptable."
           },
           {
             "name": "Wedding souvenir / invitation",
-            "required": false
+            "required": false,
+            "hint": "Upload a scan of your wedding invitation, ceremony program, or any wedding-related souvenirs. This helps show the authenticity of your marriage."
           },
           {
             "name": "Wedding rings and/or wedding venue booking receipts",
-            "required": false
+            "required": false,
+            "hint": "Upload photos of your wedding rings or receipts/contracts from your wedding venue, caterer, or photographer. These help establish that a genuine wedding ceremony took place."
           },
           {
             "name": "Insurance policies naming each other (health, life)",
-            "required": false
+            "required": false,
+            "hint": "Upload copies of health insurance, life insurance, or auto insurance policies that list your spouse as a beneficiary or co-insured. The policy must show both your names and the policy date."
           },
           {
             "name": "Notarized affidavits from family/friends (at least 2 letters)",
-            "required": false
+            "required": false,
+            "hint": "Upload at least 2 signed and notarized letters from friends or family members who know you as a couple and can attest to the authenticity of your marriage. Each letter should describe how they know you and provide specific details about your relationship."
           },
           {
             "name": "Travel records (flight itineraries, boarding passes, hotel bookings)",
-            "required": false
+            "required": false,
+            "hint": "Upload copies of boarding passes, flight itineraries, hotel bookings, or visa stamps showing that you and your spouse have traveled to visit each other. These help demonstrate an ongoing relationship across borders."
           },
           {
             "name": "Social media evidence (posts, comments, tagged photos)",
-            "required": false
+            "required": false,
+            "hint": "Upload screenshots of Facebook, Instagram, or other social media posts that show you and your spouse together, tagging each other, or commenting on each other's posts. Include the date and platform visible in each screenshot."
           },
           {
             "name": "Correspondence (emails, chats, SMS, call records)",
-            "required": false
+            "required": false,
+            "hint": "Upload screenshots of text messages, WhatsApp/Messenger chats, emails, or phone call logs showing regular communication with your spouse. Make sure the dates and names are visible in the screenshots."
           }
         ]
       },
@@ -100,8 +116,12 @@
         "documents": [
           {
             "name": "Marriage certificate, divorce decree, adoption decree, or court order for name changes (if applicable)",
-            "required": false
-          }
+            "required": false,
+            "hint": "Upload any legal documents related to name changes, such as a court order for name change, amended birth certificate, or divorce decree. These help explain any discrepancies between your current name and the name on other documents."
+          },
+          { "name": "Custom Document 1", "required": false },
+          { "name": "Custom Document 2", "required": false },
+          { "name": "Custom Document 3", "required": false }
         ]
       }
     ]
@@ -122,11 +142,13 @@
         "documents": [
           {
             "name": "Proof of U.S. citizenship (birth certificate, U.S. passport bio page, or Certificate of Naturalization/Citizenship)",
-            "required": true
+            "required": true,
+            "hint": "Upload one of the following: your U.S. birth certificate, the bio page of your U.S. passport, your Certificate of Naturalization (N-550/N-570), or your Certificate of Citizenship (N-560/N-561). Only U.S. citizens (not green card holders) can petition for parents."
           },
           {
             "name": "Government-issued photo ID",
-            "required": true
+            "required": true,
+            "hint": "Upload a valid state driver's license, state ID card, or U.S. passport. The document must show your full legal name, date of birth, and photo."
           }
         ]
       },
@@ -135,23 +157,28 @@
         "documents": [
           {
             "name": "U.S. citizen child's birth certificate showing parent's name",
-            "required": true
+            "required": true,
+            "hint": "Upload your official birth certificate that lists the parent's name. This is the primary document proving the parent-child relationship. If your name has changed since birth, also upload your marriage certificate or court order for name change."
           },
           {
             "name": "If adopted: final adoption decree + proof of legal custody and residency before age 16",
-            "required": false
+            "required": false,
+            "hint": "If you were adopted, upload the final court adoption decree AND evidence that the adoptive parent had legal custody and you resided with them before your 16th birthday (e.g., school records, medical records showing the same address)."
           },
           {
             "name": "If step-parent: marriage certificate of U.S. citizen child's parent + proof of termination of prior marriages",
-            "required": false
+            "required": false,
+            "hint": "If the relationship is through a step-parent, upload the marriage certificate between your biological parent and the step-parent, plus divorce decrees or death certificates for any prior marriages that ended before this marriage."
           },
           {
             "name": "If father & child born out of wedlock: proof of legitimation or emotional/financial relationship",
-            "required": false
+            "required": false,
+            "hint": "If the petitioner's father is being petitioned and the parents were not married at birth, upload evidence of legitimation (e.g., acknowledgment of paternity, court order) OR evidence of an ongoing emotional/financial relationship (e.g., school records listing the father, money transfer records, letters)."
           },
           {
             "name": "Paternal or maternal DNA test result from a USCIS-approved lab",
-            "required": false
+            "required": false,
+            "hint": "If you cannot provide a birth certificate or other documents proving the relationship, you may submit a DNA test result from a USCIS-approved laboratory. The test must be conducted according to AABB accreditation standards. Contact us for more guidance on arranging a USCIS-approved DNA test."
           }
         ]
       },
@@ -160,35 +187,43 @@
         "documents": [
           {
             "name": "Medical/health records showing parent and child's names",
-            "required": false
+            "required": false,
+            "hint": "Examples: hospital birth records listing the parent, vaccination records, or medical insurance documents listing both parent and child."
           },
           {
             "name": "Church or religious records listing parent and child's name",
-            "required": false
+            "required": false,
+            "hint": "Examples: baptism certificates, church membership records, or religious school enrollment records that list both the parent and child."
           },
           {
             "name": "Insurance records naming both petitioner and beneficiary",
-            "required": false
+            "required": false,
+            "hint": "Upload insurance policy documents (health, life, auto) that list both parent and child's names, showing a documented family relationship."
           },
           {
             "name": "Employment records showing parent and child's names",
-            "required": false
+            "required": false,
+            "hint": "Examples: employer-issued dependent benefit forms, emergency contact forms at work, or HR records listing the parent as a dependent or emergency contact."
           },
           {
             "name": "Financial records (tax returns) listing parent and child's name",
-            "required": false
+            "required": false,
+            "hint": "Upload IRS tax returns (Form 1040) that list the parent as a dependent, or show shared financial history. Include relevant pages/schedules."
           },
           {
             "name": "Census or tribal records in both names",
-            "required": false
+            "required": false,
+            "hint": "Upload census records (e.g., U.S. Census household records) or tribal enrollment documents that list both parent and child."
           },
           {
             "name": "Government records or ID documents showing names of both",
-            "required": false
+            "required": false,
+            "hint": "Examples: school enrollment records listing a parent, military records, or any government-issued document that establishes the parent-child connection."
           },
           {
             "name": "Proof of ongoing parent-child relationship (money transfers/remittance)",
-            "required": false
+            "required": false,
+            "hint": "Upload bank transfer receipts, Western Union / Remitly / MoneyGram records showing money sent to the parent, or other evidence of ongoing financial support. Include records covering at least the past 12 months."
           }
         ]
       },
@@ -197,7 +232,8 @@
         "documents": [
           {
             "name": "Passport biographic page",
-            "required": true
+            "required": true,
+            "hint": "Upload a scan or photo of the parent's passport page showing their full name, date of birth, nationality, passport number, and photo. The passport must be currently valid."
           }
         ]
       },
@@ -206,8 +242,12 @@
         "documents": [
           {
             "name": "Marriage certificate, divorce decree, adoption decree, or court order for name changes (if applicable)",
-            "required": false
-          }
+            "required": false,
+            "hint": "Upload any legal documents related to name changes or family status changes that may explain discrepancies between the names appearing in different documents."
+          },
+          { "name": "Custom Document 1", "required": false },
+          { "name": "Custom Document 2", "required": false },
+          { "name": "Custom Document 3", "required": false }
         ]
       }
     ]
@@ -228,11 +268,13 @@
         "documents": [
           {
             "name": "Proof of U.S. citizenship OR green card (front and back)",
-            "required": true
+            "required": true,
+            "hint": "U.S. citizens: upload your U.S. passport bio page, birth certificate, or Certificate of Naturalization. Green card holders: upload both the front and back of your Permanent Resident Card (I-551 / green card)."
           },
           {
             "name": "Government-issued photo ID",
-            "required": true
+            "required": true,
+            "hint": "Upload a valid state driver's license, state ID card, or U.S. passport showing your full legal name, date of birth, and photo."
           }
         ]
       },
@@ -241,19 +283,23 @@
         "documents": [
           {
             "name": "Child's birth certificate showing sponsoring parent's name",
-            "required": true
+            "required": true,
+            "hint": "Upload the child's official birth certificate that lists your name as a parent. If the certificate is not in English, include a certified English translation."
           },
           {
             "name": "If adopted: final adoption decree + proof of legal custody and residency before age 16",
-            "required": false
+            "required": false,
+            "hint": "For adopted children, upload the final court adoption decree plus documentation proving the child resided with you before their 16th birthday (e.g., school records, medical records at the same address)."
           },
           {
             "name": "If stepchild: marriage certificate between parent and stepparent + proof of prior marriage terminations",
-            "required": false
+            "required": false,
+            "hint": "Upload the marriage certificate between the stepparent and the child's biological parent, plus divorce decrees or death certificates for any prior marriages of either party."
           },
           {
             "name": "Paternal or maternal DNA test result from a USCIS-approved lab",
-            "required": false
+            "required": false,
+            "hint": "If the parent-child relationship cannot be proven through standard documents, a DNA test from an AABB-accredited laboratory may be used. Contact us before arranging a DNA test to ensure it meets USCIS requirements."
           }
         ]
       },
@@ -262,35 +308,43 @@
         "documents": [
           {
             "name": "Medical/health records showing parent and child's names",
-            "required": false
+            "required": false,
+            "hint": "Examples: hospital birth records, vaccination records, or health insurance cards listing both parent and child's names."
           },
           {
             "name": "Church or religious records listing parent and child's name",
-            "required": false
+            "required": false,
+            "hint": "Examples: baptism certificate, church membership or Sunday school enrollment records listing the parent and child."
           },
           {
             "name": "Insurance records naming both petitioner and beneficiary",
-            "required": false
+            "required": false,
+            "hint": "Upload insurance policies (health, life, or auto) that list both the petitioner and the child, demonstrating a family relationship."
           },
           {
             "name": "Employment records showing parent and child's names",
-            "required": false
+            "required": false,
+            "hint": "Examples: employer benefit enrollment forms listing children as dependents, or HR emergency contact forms listing the child."
           },
           {
             "name": "Financial records (tax returns) listing parent and child's name",
-            "required": false
+            "required": false,
+            "hint": "Upload relevant pages from IRS tax returns (Form 1040) that list the child as a dependent."
           },
           {
             "name": "Census or tribal records in both names",
-            "required": false
+            "required": false,
+            "hint": "Upload census household records or tribal enrollment documents listing both parent and child."
           },
           {
             "name": "Government records or ID documents showing names of both",
-            "required": false
+            "required": false,
+            "hint": "Examples: school enrollment records listing the parent, military records, or any government document that ties the parent and child together."
           },
           {
             "name": "Proof of ongoing parent-child relationship (money transfers/remittance)",
-            "required": false
+            "required": false,
+            "hint": "Upload receipts of money transfers or remittances sent to the child or their caretaker, demonstrating ongoing financial support across borders."
           }
         ]
       },
@@ -299,7 +353,8 @@
         "documents": [
           {
             "name": "Passport biographic page",
-            "required": true
+            "required": true,
+            "hint": "Upload a scan of the child's passport page showing their full name, date of birth, nationality, and passport number. The passport should be valid."
           }
         ]
       },
@@ -308,8 +363,12 @@
         "documents": [
           {
             "name": "Marriage certificate, divorce decree, adoption decree, or court order for name changes (if applicable)",
-            "required": false
-          }
+            "required": false,
+            "hint": "Upload any documents that explain name discrepancies or changes in family circumstances relevant to the child's petition."
+          },
+          { "name": "Custom Document 1", "required": false },
+          { "name": "Custom Document 2", "required": false },
+          { "name": "Custom Document 3", "required": false }
         ]
       }
     ]
@@ -330,11 +389,13 @@
         "documents": [
           {
             "name": "Proof of U.S. citizenship",
-            "required": true
+            "required": true,
+            "hint": "Only U.S. citizens (not green card holders) can petition for siblings. Upload your U.S. birth certificate, U.S. passport bio page, Certificate of Naturalization, or Certificate of Citizenship."
           },
           {
             "name": "Government-issued photo ID",
-            "required": true
+            "required": true,
+            "hint": "Upload a valid state driver's license, state ID card, or U.S. passport showing your full legal name, date of birth, and photo."
           }
         ]
       },
@@ -343,23 +404,28 @@
         "documents": [
           {
             "name": "Petitioner's birth certificate",
-            "required": true
+            "required": true,
+            "hint": "Upload your official birth certificate showing your parents' names. This document will be used to establish the shared parentage between you and your sibling."
           },
           {
             "name": "Sibling's birth certificate (showing at least one common parent)",
-            "required": true
+            "required": true,
+            "hint": "Upload your sibling's official birth certificate that shows at least one parent in common with your own birth certificate. Include a certified English translation if the certificate is not in English."
           },
           {
             "name": "If half-siblings: proof of termination of parents' prior marriages",
-            "required": false
+            "required": false,
+            "hint": "If you and your sibling share only one parent (half-siblings), upload divorce decrees or death certificates to show how the shared parent's prior marriages ended before your sibling was born."
           },
           {
             "name": "If adopted siblings: adoption decrees + proof both adopted by same parent(s) before age 16",
-            "required": false
+            "required": false,
+            "hint": "Upload the final adoption decree for both the petitioner and the beneficiary, plus evidence that both were adopted by the same parent(s) before each turned 16."
           },
           {
             "name": "If step-siblings: marriage certificate of common parent to stepparent + proof of prior marriage terminations (relationship formed before age 18)",
-            "required": false
+            "required": false,
+            "hint": "Upload the marriage certificate between the shared parent and the stepparent, plus any divorce decrees from prior marriages. The step-sibling relationship must have been established before each person turned 18."
           }
         ]
       },
@@ -368,36 +434,52 @@
         "documents": [
           {
             "name": "Sibling DNA test result from a USCIS-approved lab",
-            "required": false
+            "required": false,
+            "hint": "If documentary evidence of shared parentage is unavailable, a DNA test from an AABB-accredited USCIS-approved lab can be submitted. Contact us before arranging a DNA test."
           },
           {
             "name": "Medical/health records showing parent and sibling names",
-            "required": false
+            "required": false,
+            "hint": "Examples: vaccination records or hospital records listing the same parent and both siblings' names."
           },
           {
             "name": "Church or religious records listing parent and sibling names",
-            "required": false
+            "required": false,
+            "hint": "Examples: baptism records, church enrollment records, or religious school records listing the same parent and both siblings."
           },
           {
             "name": "Insurance records (health or life) listing both siblings",
-            "required": false
+            "required": false,
+            "hint": "Upload insurance policies where both siblings appear as dependents under the same parent/policy, demonstrating shared family ties."
           },
           {
             "name": "Employment records showing both sibling names",
-            "required": false
+            "required": false,
+            "hint": "Examples: employer benefit forms listing both siblings as dependents of the same parent, or HR emergency contact records."
           },
           {
             "name": "Financial records listing both siblings",
-            "required": false
+            "required": false,
+            "hint": "Upload tax returns listing both siblings as dependents of the same parent, or other financial documents showing a shared family unit."
           },
           {
             "name": "Census or tribal records showing names",
-            "required": false
+            "required": false,
+            "hint": "Upload census household records or tribal enrollment documents listing both siblings in the same household or under the same parent."
           },
           {
             "name": "Proof of ongoing sibling relationship (money transfers/remittance)",
-            "required": false
+            "required": false,
+            "hint": "Upload records showing that you regularly support or communicate with your sibling (e.g., money transfer receipts, wire transfer records, or remittance history)."
           }
+        ]
+      },
+      {
+        "title": "Any other Additional Documents (Optional)",
+        "documents": [
+          { "name": "Custom Document 1", "required": false },
+          { "name": "Custom Document 2", "required": false },
+          { "name": "Custom Document 3", "required": false }
         ]
       }
     ]
@@ -405,8 +487,8 @@
   "k1_fiance": {
     "id": "k1_fiance",
     "title": "Application for K-1 Fiancé(e) Petition",
-    "subtitle": "K-1 Fiancé(e) Visa Petition",
-    "description": "bringing your fiancé(e) to the United States on a K-1 visa to get married",
+    "subtitle": "Form I-129F",
+    "description": "sponsoring your fiancé(e) who is currently abroad to come to the United States to marry",
     "forms": [
       "G-1145 (E-notification)",
       "I-129F (Petition for Alien Fiancé(e))"
@@ -418,11 +500,13 @@
         "documents": [
           {
             "name": "Proof of U.S. citizenship",
-            "required": true
+            "required": true,
+            "hint": "Only U.S. citizens can file a K-1 visa petition. Upload your U.S. passport bio page, U.S. birth certificate, Certificate of Naturalization, or Certificate of Citizenship."
           },
           {
             "name": "Government-issued photo ID",
-            "required": true
+            "required": true,
+            "hint": "Upload a valid state driver's license, state ID card, or U.S. passport showing your full legal name, date of birth, and photo."
           }
         ]
       },
@@ -431,12 +515,67 @@
         "documents": [
           {
             "name": "Passport biographic page",
-            "required": true
+            "required": true,
+            "hint": "Upload a scan of the fiancé(e)'s passport page showing full name, date of birth, nationality, passport number, and photo. The passport must be currently valid."
           },
           {
             "name": "Birth certificate (certified translation if not in English)",
-            "required": true
+            "required": true,
+            "hint": "Upload the fiancé(e)'s official birth certificate. If not in English, also include a complete certified English translation with a translator's certification statement."
           }
+        ]
+      },
+      {
+        "title": "Relationship Evidence",
+        "documents": [
+          {
+            "name": "Evidence of in-person meeting within the last 2 years — upload at least two (boarding passes, itineraries, visas, entry/exit stamps, hotel bookings, event tickets)",
+            "required": true,
+            "hint": "You must prove you met your fiancé(e) in person within 2 years before filing. Upload at least 2 of the following: boarding passes, flight itineraries, passport entry/exit stamps, hotel booking confirmations, event tickets from your visit, or visa stamps showing travel to each other's country."
+          },
+          {
+            "name": "Dated photos together labeled with names, places, and dates",
+            "required": true,
+            "hint": "Upload photos of you and your fiancé(e) together, taken during your in-person meetings. Each photo should be labeled (or captioned) with the date and location. Variety in settings (indoor, outdoor, with others) strengthens your case."
+          },
+          {
+            "name": "Communication evidence (chat logs, emails, call records, letters)",
+            "required": false,
+            "hint": "Upload screenshots of WhatsApp/Messenger chats, email threads, or phone call logs showing regular ongoing communication. Make sure names, dates, and the app or platform are clearly visible."
+          },
+          {
+            "name": "Proof of ongoing relationship (money transfers, shared accounts)",
+            "required": false,
+            "hint": "Upload evidence such as international money transfer records, shared financial accounts, or joint purchases that demonstrate an ongoing committed relationship."
+          }
+        ]
+      },
+      {
+        "title": "Statements",
+        "documents": [
+          {
+            "name": "Signed statements of intent to marry from both petitioner and beneficiary",
+            "required": true,
+            "hint": "Both you and your fiancé(e) must each sign a separate written statement declaring your genuine intent to marry each other within 90 days of the fiancé(e)'s entry into the U.S. These can be simple personal statements — we will help you draft them."
+          }
+        ]
+      },
+      {
+        "title": "Prior Relationships (If Applicable)",
+        "documents": [
+          {
+            "name": "Divorce decree(s), annulment(s), or death certificate(s) for all prior marriages",
+            "required": true,
+            "hint": "If either you or your fiancé(e) was previously married, you must upload official documents proving those marriages legally ended: divorce decrees from the court, annulment decrees, or death certificates for deceased spouses."
+          }
+        ]
+      },
+      {
+        "title": "Any other Additional Documents (Optional)",
+        "documents": [
+          { "name": "Custom Document 1", "required": false },
+          { "name": "Custom Document 2", "required": false },
+          { "name": "Custom Document 3", "required": false }
         ]
       }
     ]
@@ -444,15 +583,14 @@
   "spouse_aos": {
     "id": "spouse_aos",
     "title": "Application for Marriage-Based Adjustment of Status (AOS)",
-    "subtitle": "Marriage-Based Green Card (Adjustment of Status)",
-    "description": "adjusting your spouse's status to permanent resident while they are in the United States",
+    "subtitle": "Form I-130 + I-130A + I-485 + I-864",
+    "description": "Optional add-ons: I-765 (EAD) and I-131 (Advance Parole) with G-1145.",
     "forms": [
       "G-1145",
       "I-130",
       "I-130A",
       "I-485",
-      "I-864",
-      "Optional: I-765 (EAD), I-131 (Advance Parole)"
+      "I-864 (with optional I-864A/joint sponsor I-864)"
     ],
     "totalDocuments": 36,
     "sections": [
@@ -461,11 +599,13 @@
         "documents": [
           {
             "name": "Proof of U.S. citizenship OR green card (front and back)",
-            "required": true
+            "required": true,
+            "hint": "U.S. citizens: upload your U.S. passport bio page, birth certificate, or Certificate of Naturalization. Green card holders: upload both FRONT and BACK of your Permanent Resident Card (Form I-551)."
           },
           {
             "name": "Government-issued photo ID",
-            "required": true
+            "required": true,
+            "hint": "Upload a valid state driver's license, state ID card, or U.S. passport showing your full legal name, date of birth, and photo."
           }
         ]
       },
@@ -474,20 +614,212 @@
         "documents": [
           {
             "name": "Birth certificate (certified translation if not in English)",
-            "required": true
+            "required": true,
+            "hint": "Upload the immigrant spouse's official birth certificate. If not in English, also upload a complete certified English translation with the translator's full name, signature, and certification that they are competent to translate."
           },
           {
             "name": "Passport biographic page",
-            "required": true
+            "required": true,
+            "hint": "Upload a scan of the immigrant spouse's current passport bio page, showing their full name, date of birth, nationality, and photo."
           },
           {
             "name": "Form I-94 Arrival/Departure Record",
-            "required": true
+            "required": true,
+            "hint": "Download your most recent I-94 record from the official CBP I-94 website (i94.cbp.dhs.gov). Upload the printout showing your entry date, visa class, and authorized stay period."
           },
           {
             "name": "Proof of lawful entry (visa, admission stamp, or parole documents)",
-            "required": true
+            "required": true,
+            "hint": "Upload evidence of your lawful entry into the U.S., such as: a copy of the visa stamp in your passport, a border entry stamp page, or parole documents issued by USCIS or CBP."
           }
+        ]
+      },
+      {
+        "title": "Marriage & Relationship Evidence",
+        "documents": [
+          {
+            "name": "Marriage certificate (original or certified copy)",
+            "required": true,
+            "hint": "Upload the official marriage certificate from the authority where the marriage was performed. If not in English, include a certified English translation."
+          },
+          {
+            "name": "Proof of termination of all prior marriages (if applicable)",
+            "required": false,
+            "hint": "Upload official divorce decrees, annulment papers, or death certificates for every prior marriage of either spouse."
+          },
+          {
+            "name": "Photos together over time, labeled with dates/locations",
+            "required": true,
+            "hint": "Upload a collection of dated photographs showing you together over different time periods. Include photos from various events and locations. Each photo should be labeled with the date and place."
+          },
+          {
+            "name": "Birth certificates of children born to the marriage (if any)",
+            "required": false,
+            "hint": "If you have children together, upload their official birth certificates listing both parents' names. Include certified translations if not in English."
+          }
+        ]
+      },
+      {
+        "title": "At Least Eight (8) of the Following — Required",
+        "documents": [
+          {
+            "name": "Joint lease/mortgage or property documents (with both spouses' names)",
+            "required": false,
+            "hint": "Upload a signed lease agreement or mortgage document that lists both spouses' names, showing you share a residence."
+          },
+          {
+            "name": "Joint bank account statements (monthly or quarterly)",
+            "required": false,
+            "hint": "Upload recent bank statements from a joint account showing both spouses' names. Statements from the last 3–12 months are ideal."
+          },
+          {
+            "name": "Joint tax returns (IRS transcripts or copies filed as 'Married Filing Jointly')",
+            "required": false,
+            "hint": "Upload copies of IRS Form 1040 filed as 'Married Filing Jointly,' or an IRS tax transcript showing the joint filing. This is one of the strongest forms of marriage evidence."
+          },
+          {
+            "name": "Shared loans or debts (car, student, personal — both names)",
+            "required": false,
+            "hint": "Upload loan agreements or monthly statements for any shared debts (auto loan, personal loan, credit card) that list both spouses' names."
+          },
+          {
+            "name": "Wedding souvenir / invitation",
+            "required": false,
+            "hint": "Upload a scan of your wedding invitation, ceremony program, or keepsake that shows both your names and the wedding date."
+          },
+          {
+            "name": "Wedding rings and/or wedding venue booking receipts",
+            "required": false,
+            "hint": "Upload photos of your wedding rings (worn by both spouses) and/or receipts/contracts from your wedding venue, caterer, or photographer."
+          },
+          {
+            "name": "Insurance policies naming each other (health, auto, life)",
+            "required": false,
+            "hint": "Upload insurance policy documents listing your spouse as a co-insured or beneficiary (health insurance ID cards, life insurance policy, or auto insurance declarations page)."
+          },
+          {
+            "name": "Utility bills showing both names (gas, electric, water, internet)",
+            "required": false,
+            "hint": "Upload recent utility bills (gas, electricity, water, internet) addressed to both spouses at the same address, confirming shared residence."
+          },
+          {
+            "name": "Notarized affidavits from family/friends (at least 2 letters)",
+            "required": false,
+            "hint": "Upload at least 2 signed, notarized letters from friends or family who know you as a couple. Each letter should describe how they know you, how long, and give specific examples of your shared life together."
+          },
+          {
+            "name": "Travel records showing joint travel",
+            "required": false,
+            "hint": "Upload boarding passes, hotel bookings, or travel itineraries showing joint travel (e.g., vacations, family visits) after you married."
+          },
+          {
+            "name": "Social media evidence (posts, comments, tagged photos)",
+            "required": false,
+            "hint": "Upload dated screenshots from Facebook, Instagram, or other platforms showing posts together, mutual comments, or public displays of your relationship."
+          },
+          {
+            "name": "Correspondence (emails, chats, SMS, call records)",
+            "required": false,
+            "hint": "Upload screenshots of text messages, WhatsApp chats, emails, or call logs between you and your spouse showing regular communication."
+          }
+        ]
+      },
+      {
+        "title": "Petitioner Financial Affidavit Documents",
+        "documents": [
+          {
+            "name": "Most recent 3 years IRS tax return, transcript, or Form 1040 with W-2s",
+            "required": true,
+            "hint": "Upload copies of your federal tax returns for the most recent 3 tax years. Include all W-2s and any 1099 forms. If you did not file, upload a signed statement explaining why and any IRS correspondence."
+          },
+          {
+            "name": "Employment verification letter and/or 6 months' pay stubs OR proof of self-employment",
+            "required": true,
+            "hint": "Upload a letter from your employer on company letterhead stating your job title, salary, and employment status. Also upload your last 6 months of pay stubs. If self-employed, upload business tax returns and a signed statement of self-employment income."
+          },
+          {
+            "name": "6 months' bank statements",
+            "required": false,
+            "hint": "Upload the last 6 months of statements from your personal bank accounts to demonstrate financial stability. All pages of each statement should be included."
+          },
+          {
+            "name": "Evidence of assets (if income is insufficient)",
+            "required": false,
+            "hint": "If your income alone does not meet the 125% poverty guideline, upload documentation of assets such as property deeds, investment/brokerage account statements, or vehicle titles that show sufficient assets to make up the difference."
+          }
+        ]
+      },
+      {
+        "title": "Joint Sponsor Documents (If Applicable)",
+        "documents": [
+          {
+            "name": "Joint sponsor: proof of U.S. citizenship OR green card",
+            "required": false,
+            "hint": "The joint sponsor must be a U.S. citizen or green card holder. Upload their U.S. passport bio page, birth certificate, Certificate of Naturalization, or both sides of their green card."
+          },
+          {
+            "name": "Joint sponsor: government-issued photo ID",
+            "required": false,
+            "hint": "Upload a valid driver's license, state ID, or passport for the joint sponsor showing their full legal name, date of birth, and photo."
+          },
+          {
+            "name": "Joint sponsor: most recent 3 years IRS tax return (Form 1040) or transcript",
+            "required": false,
+            "hint": "The joint sponsor must provide their last 3 years of federal tax returns or IRS tax transcripts, including all W-2s and 1099s."
+          },
+          {
+            "name": "Joint sponsor: 1099s and/or W-2s for the most recent tax year",
+            "required": false,
+            "hint": "Upload all W-2 and 1099 forms the joint sponsor received for the most recent tax year. These confirm reported income."
+          },
+          {
+            "name": "Joint sponsor: employment verification/6 mo pay stubs OR proof of self-employment",
+            "required": false,
+            "hint": "Upload an employer verification letter and 6 months of pay stubs. If self-employed, upload a business tax return and signed self-employment income statement."
+          }
+        ]
+      },
+      {
+        "title": "Household Member Income Documents (If Applicable)",
+        "documents": [
+          {
+            "name": "Household member: proof of U.S. citizenship OR green card",
+            "required": false,
+            "hint": "If a household member is contributing their income to meet the sponsorship requirement, upload their U.S. citizenship proof or both sides of their green card."
+          },
+          {
+            "name": "Household member: government-issued photo ID",
+            "required": false,
+            "hint": "Upload a valid driver's license, state ID, or passport for the household member."
+          },
+          {
+            "name": "Household member: most recent 3 years IRS tax return (Form 1040) or transcript",
+            "required": false,
+            "hint": "The household member must submit their last 3 years of federal tax returns or IRS transcripts."
+          },
+          {
+            "name": "Household member: 1099s and/or W-2s for the most recent tax year",
+            "required": false,
+            "hint": "Upload all income documents (W-2s and 1099s) for the household member for the most recent tax year."
+          },
+          {
+            "name": "Household member: employment verification/6 mo pay stubs OR proof of self-employment",
+            "required": false,
+            "hint": "Upload an employer letter and 6 months of pay stubs, or business tax return and self-employment statement for the household member."
+          }
+        ]
+      },
+      {
+        "title": "Any other Additional Documents (Optional)",
+        "documents": [
+          {
+            "name": "Marriage certificate, divorce decree, adoption decree, or court order for any name changes (parent or child) If applicable",
+            "required": false,
+            "hint": "Upload legal documents that explain name discrepancies or changes in family status relevant to this application."
+          },
+          { "name": "Custom Document 1", "required": false },
+          { "name": "Custom Document 2", "required": false },
+          { "name": "Custom Document 3", "required": false }
         ]
       }
     ]
@@ -511,11 +843,13 @@
         "documents": [
           {
             "name": "Proof of U.S. citizenship",
-            "required": true
+            "required": true,
+            "hint": "Only U.S. citizens (not green card holders) can petition for parents. Upload your U.S. birth certificate, U.S. passport bio page, Certificate of Naturalization, or Certificate of Citizenship."
           },
           {
             "name": "Government-issued photo ID",
-            "required": true
+            "required": true,
+            "hint": "Upload a valid driver's license, state ID, or U.S. passport showing your full legal name, date of birth, and photo."
           }
         ]
       },
@@ -524,19 +858,23 @@
         "documents": [
           {
             "name": "U.S. citizen child's birth certificate showing parent's name",
-            "required": true
+            "required": true,
+            "hint": "Upload your official birth certificate that lists the parent's name being petitioned. This is the primary proof of the parent-child relationship."
           },
           {
             "name": "If adopted: final adoption decree + proof of legal custody and residency before age 16",
-            "required": false
+            "required": false,
+            "hint": "If adopted, upload the final court adoption decree AND documents showing the adoptive parent had legal custody before your 16th birthday (e.g., school records, medical records at the same address)."
           },
           {
             "name": "If step-parent: marriage certificate + proof of prior marriage terminations",
-            "required": false
+            "required": false,
+            "hint": "Upload the marriage certificate between the step-parent and your biological parent, plus any divorce decrees or death certificates from prior marriages."
           },
           {
             "name": "If father & child born out of wedlock: legitimation proof or evidence of emotional/financial relationship",
-            "required": false
+            "required": false,
+            "hint": "Upload a court order of legitimation, acknowledgment of paternity, or evidence of a genuine ongoing relationship (e.g., school records naming the father, financial support records)."
           }
         ]
       },
@@ -545,35 +883,43 @@
         "documents": [
           {
             "name": "Paternal or maternal DNA test result from a USCIS-approved lab",
-            "required": false
+            "required": false,
+            "hint": "If documentary evidence cannot prove the parent-child relationship, a DNA test from an AABB-accredited lab may be used. Contact us before arranging this test."
           },
           {
             "name": "Medical/health records showing parent and child's names",
-            "required": false
+            "required": false,
+            "hint": "Examples: vaccination records, medical insurance cards listing the parent and child, or hospital records."
           },
           {
             "name": "Church or religious records listing parent and child's name",
-            "required": false
+            "required": false,
+            "hint": "Examples: baptism certificate or religious school enrollment records listing both the parent and child."
           },
           {
             "name": "Insurance records naming both petitioner and beneficiary",
-            "required": false
+            "required": false,
+            "hint": "Upload insurance policies listing both parent and child as insured or beneficiary."
           },
           {
             "name": "Employment records showing parent and child's names",
-            "required": false
+            "required": false,
+            "hint": "Examples: employer dependent enrollment forms, or HR records listing the parent as dependent/emergency contact."
           },
           {
             "name": "Financial records (tax returns) listing parent and child's name",
-            "required": false
+            "required": false,
+            "hint": "Upload relevant IRS Form 1040 pages listing the parent as a dependent, or other financial documents reflecting the family relationship."
           },
           {
             "name": "Census or tribal records in both names",
-            "required": false
+            "required": false,
+            "hint": "Upload census household records or tribal enrollment documents listing both parent and child."
           },
           {
             "name": "Government records or ID documents showing both names",
-            "required": false
+            "required": false,
+            "hint": "Examples: school enrollment records, military records, or any government document linking parent and child."
           }
         ]
       },
@@ -582,19 +928,23 @@
         "documents": [
           {
             "name": "Parent's birth certificate (with certified English translation if needed)",
-            "required": true
+            "required": true,
+            "hint": "Upload the parent's official birth certificate. Include a certified English translation if the certificate is not in English."
           },
           {
             "name": "Passport biographic page",
-            "required": true
+            "required": true,
+            "hint": "Upload the parent's current passport bio page showing their full name, date of birth, nationality, and photo."
           },
           {
             "name": "Form I-94 Arrival/Departure Record",
-            "required": true
+            "required": true,
+            "hint": "Download the parent's most recent I-94 from cbp.dhs.gov/I94. Upload the printout showing their entry date, authorized stay, and visa class."
           },
           {
             "name": "Proof of lawful entry (visa, admission stamp, or parole documents)",
-            "required": true
+            "required": true,
+            "hint": "Upload the visa stamp in the parent's passport, a CBP entry stamp, or parole authorization documents that prove they entered the U.S. lawfully."
           }
         ]
       },
@@ -603,19 +953,23 @@
         "documents": [
           {
             "name": "Most recent 3 years IRS tax return, transcript, or Form 1040 with W-2s",
-            "required": true
+            "required": true,
+            "hint": "Upload your last 3 years of federal tax returns. Include all W-2 and 1099 forms. If you didn't file in any year, include a written explanation and any IRS notices."
           },
           {
             "name": "Employment verification letter and/or 6 months' pay stubs OR proof of self-employment",
-            "required": true
+            "required": true,
+            "hint": "Upload an employer letter (on letterhead, stating your title, salary, and employment status) and your last 6 months of pay stubs. If self-employed, submit business tax returns and a self-employment income statement."
           },
           {
             "name": "6 months' bank statements",
-            "required": false
+            "required": false,
+            "hint": "Upload the most recent 6 months of personal bank statements to show financial stability."
           },
           {
             "name": "Evidence of assets (if income is insufficient)",
-            "required": false
+            "required": false,
+            "hint": "If your income doesn't meet 125% of the federal poverty level, upload property deeds, investment/brokerage statements, or vehicle titles as supplemental asset evidence."
           }
         ]
       },
@@ -624,23 +978,28 @@
         "documents": [
           {
             "name": "Joint sponsor: proof of U.S. citizenship OR green card",
-            "required": false
+            "required": false,
+            "hint": "The joint sponsor must be a U.S. citizen or lawful permanent resident. Upload their citizenship proof or both sides of their green card."
           },
           {
             "name": "Joint sponsor: government-issued photo ID",
-            "required": false
+            "required": false,
+            "hint": "Upload a valid driver's license, state ID, or passport for the joint sponsor."
           },
           {
             "name": "Joint sponsor: most recent 3 years IRS tax return or transcript",
-            "required": false
+            "required": false,
+            "hint": "Upload the last 3 years of federal tax returns or IRS transcripts for the joint sponsor, including W-2s and 1099s."
           },
           {
             "name": "Joint sponsor: 1099s and/or W-2s for the most recent tax year",
-            "required": false
+            "required": false,
+            "hint": "Upload all income tax forms (W-2, 1099) the joint sponsor received for the most recent tax year."
           },
           {
             "name": "Joint sponsor: employment verification/6 mo pay stubs OR proof of self-employment",
-            "required": false
+            "required": false,
+            "hint": "Upload an employer letter and 6 months of pay stubs, or self-employment tax records, for the joint sponsor."
           }
         ]
       },
@@ -649,23 +1008,28 @@
         "documents": [
           {
             "name": "Household member: proof of U.S. citizenship OR green card",
-            "required": false
+            "required": false,
+            "hint": "Upload citizenship proof or both sides of the green card for any household member whose income is being used to supplement sponsorship."
           },
           {
             "name": "Household member: government-issued photo ID",
-            "required": false
+            "required": false,
+            "hint": "Upload a valid photo ID for the household member."
           },
           {
             "name": "Household member: most recent 3 years IRS tax return or transcript",
-            "required": false
+            "required": false,
+            "hint": "Upload the last 3 years of federal tax returns or IRS transcripts for the contributing household member."
           },
           {
             "name": "Household member: 1099s and/or W-2s for the most recent tax year",
-            "required": false
+            "required": false,
+            "hint": "Upload all income documents (W-2, 1099) for the household member for the most recent year."
           },
           {
             "name": "Household member: employment verification/6 mo pay stubs OR proof of self-employment",
-            "required": false
+            "required": false,
+            "hint": "Upload an employer letter and 6 months of pay stubs, or self-employment tax records, for the contributing household member."
           }
         ]
       },
@@ -674,8 +1038,12 @@
         "documents": [
           {
             "name": "Marriage certificate, divorce decree, adoption decree, or court order for name changes (if applicable)",
-            "required": false
-          }
+            "required": false,
+            "hint": "Upload any legal documents explaining name discrepancies or changes in family circumstances relevant to this petition."
+          },
+          { "name": "Custom Document 1", "required": false },
+          { "name": "Custom Document 2", "required": false },
+          { "name": "Custom Document 3", "required": false }
         ]
       }
     ]
@@ -699,11 +1067,13 @@
         "documents": [
           {
             "name": "Proof of U.S. citizenship OR green card (front and back)",
-            "required": true
+            "required": true,
+            "hint": "U.S. citizens: upload your U.S. passport bio page, birth certificate, or Certificate of Naturalization. Green card holders: upload both the FRONT and BACK of your Permanent Resident Card (Form I-551)."
           },
           {
             "name": "Government-issued photo ID",
-            "required": true
+            "required": true,
+            "hint": "Upload a valid driver's license, state ID, or U.S. passport showing your full legal name, date of birth, and photo."
           }
         ]
       },
@@ -712,19 +1082,28 @@
         "documents": [
           {
             "name": "Child's birth certificate showing sponsoring parent's name",
-            "required": true
+            "required": true,
+            "hint": "Upload the child's official birth certificate listing your name as the parent. Include a certified English translation if the certificate is not in English."
           },
           {
             "name": "If adopted: final adoption decree + proof of legal custody and residency before age 16",
-            "required": false
+            "required": false,
+            "hint": "Upload the final court adoption decree plus documentation showing the child lived with you before their 16th birthday (e.g., school enrollment records or medical records at the same address)."
           },
           {
-            "name": "If stepchild: marriage certificate + proof of prior marriage terminations",
-            "required": false
+            "name": "If stepchild: marriage certificate between parent and stepparent + proof of prior marriage terminations",
+            "required": false,
+            "hint": "Upload the marriage certificate between the petitioning step-parent and the child's biological parent, and any divorce decrees or death certificates for prior marriages."
+          },
+          {
+            "name": "If father & child born out of wedlock: legitimation proof or emotional/financial relationship evidence",
+            "required": false,
+            "hint": "Upload a court order establishing paternity, acknowledgment of paternity records, or documented evidence of an ongoing parent-child relationship."
           },
           {
             "name": "Paternal or maternal DNA test result from a USCIS-approved lab",
-            "required": false
+            "required": false,
+            "hint": "If other documents cannot establish the parent-child relationship, a DNA test from an AABB-accredited lab may be submitted. Contact us before arranging a DNA test."
           }
         ]
       },
@@ -733,31 +1112,43 @@
         "documents": [
           {
             "name": "Medical/health records showing parent and child's names",
-            "required": false
+            "required": false,
+            "hint": "Examples: vaccination records or health insurance cards listing both parent and child."
           },
           {
             "name": "Church or religious records listing parent and child's name",
-            "required": false
+            "required": false,
+            "hint": "Examples: baptism certificate or religious school enrollment records showing both parent and child."
           },
           {
             "name": "Insurance records naming both petitioner and beneficiary",
-            "required": false
+            "required": false,
+            "hint": "Upload insurance policies (health, life) listing both the petitioner and the child."
           },
           {
             "name": "Employment records showing parent and child's names",
-            "required": false
+            "required": false,
+            "hint": "Examples: employer benefit enrollment forms listing the child as a dependent."
           },
           {
             "name": "Financial records (tax returns) listing parent and child's name",
-            "required": false
+            "required": false,
+            "hint": "Upload IRS Form 1040 pages listing the child as a dependent."
           },
           {
             "name": "Census or tribal records in both names",
-            "required": false
+            "required": false,
+            "hint": "Upload census household records or tribal documents listing both parent and child."
           },
           {
             "name": "Government records or ID documents showing both names",
-            "required": false
+            "required": false,
+            "hint": "Examples: school enrollment records listing the petitioning parent, or any government document tying parent and child."
+          },
+          {
+            "name": "Proof of ongoing parent-child relationship (money transfers/remittance)",
+            "required": false,
+            "hint": "Upload money transfer records or remittances to the child or their caretaker, showing ongoing financial support."
           }
         ]
       },
@@ -765,20 +1156,24 @@
         "title": "Child's Identity & Immigration Documents",
         "documents": [
           {
-            "name": "Child's birth certificate (with certified English translation if not in English)",
-            "required": true
+            "name": "Child's birth certificate (with certified English translation if needed)",
+            "required": true,
+            "hint": "Upload the child's official birth certificate. If not in English, include a full certified English translation."
           },
           {
             "name": "Passport biographic page",
-            "required": true
+            "required": true,
+            "hint": "Upload the child's current passport bio page showing full name, date of birth, nationality, and photo."
           },
           {
             "name": "Form I-94 Arrival/Departure Record",
-            "required": true
+            "required": true,
+            "hint": "Download the child's I-94 from cbp.dhs.gov/I94 and upload the printout showing entry date, visa class, and authorized stay."
           },
           {
             "name": "Proof of lawful entry (visa, admission stamp, or parole documents)",
-            "required": true
+            "required": true,
+            "hint": "Upload the visa stamp in the child's passport, a CBP entry stamp, or CBP/USCIS parole authorization documents."
           }
         ]
       },
@@ -787,19 +1182,23 @@
         "documents": [
           {
             "name": "Most recent 3 years IRS tax return, transcript, or Form 1040 with W-2s",
-            "required": true
+            "required": true,
+            "hint": "Upload your last 3 years of federal tax returns, including all W-2s and 1099s."
           },
           {
             "name": "Employment verification letter and/or 6 months' pay stubs OR proof of self-employment",
-            "required": true
+            "required": true,
+            "hint": "Upload an employer letter and your last 6 months of pay stubs. If self-employed, upload business tax returns and a signed self-employment income statement."
           },
           {
             "name": "6 months' bank statements",
-            "required": false
+            "required": false,
+            "hint": "Upload the most recent 6 months of personal bank account statements."
           },
           {
             "name": "Evidence of assets (if income is insufficient)",
-            "required": false
+            "required": false,
+            "hint": "Upload property deeds, investment/brokerage statements, or vehicle titles if additional asset evidence is needed."
           }
         ]
       },
@@ -808,23 +1207,28 @@
         "documents": [
           {
             "name": "Joint sponsor: proof of U.S. citizenship OR green card",
-            "required": false
+            "required": false,
+            "hint": "Upload citizenship proof or both sides of the green card for the joint sponsor."
           },
           {
             "name": "Joint sponsor: government-issued photo ID",
-            "required": false
+            "required": false,
+            "hint": "Upload a valid photo ID for the joint sponsor."
           },
           {
             "name": "Joint sponsor: most recent 3 years IRS tax return or transcript",
-            "required": false
+            "required": false,
+            "hint": "Upload the last 3 years of federal tax returns or IRS transcripts for the joint sponsor."
           },
           {
             "name": "Joint sponsor: 1099s and/or W-2s for the most recent tax year",
-            "required": false
+            "required": false,
+            "hint": "Upload all W-2 and 1099 forms for the joint sponsor for the most recent tax year."
           },
           {
             "name": "Joint sponsor: employment verification/6 mo pay stubs OR proof of self-employment",
-            "required": false
+            "required": false,
+            "hint": "Upload an employer letter and 6 months of pay stubs, or self-employment tax records, for the joint sponsor."
           }
         ]
       },
@@ -833,23 +1237,28 @@
         "documents": [
           {
             "name": "Household member: proof of U.S. citizenship OR green card",
-            "required": false
+            "required": false,
+            "hint": "Upload citizenship proof or both sides of the green card for the contributing household member."
           },
           {
             "name": "Household member: government-issued photo ID",
-            "required": false
+            "required": false,
+            "hint": "Upload a valid photo ID for the contributing household member."
           },
           {
             "name": "Household member: most recent 3 years IRS tax return or transcript",
-            "required": false
+            "required": false,
+            "hint": "Upload the last 3 years of tax returns or IRS transcripts for the contributing household member."
           },
           {
             "name": "Household member: 1099s and/or W-2s for the most recent tax year",
-            "required": false
+            "required": false,
+            "hint": "Upload all income tax forms for the contributing household member for the most recent year."
           },
           {
             "name": "Household member: employment verification/6 mo pay stubs OR proof of self-employment",
-            "required": false
+            "required": false,
+            "hint": "Upload an employer letter and 6 months of pay stubs, or self-employment records, for the contributing household member."
           }
         ]
       },
@@ -858,8 +1267,113 @@
         "documents": [
           {
             "name": "Marriage certificate, divorce decree, adoption decree, or court order for name changes (if applicable)",
-            "required": false
+            "required": false,
+            "hint": "Upload legal documents that explain any name discrepancies or changes in family status."
+          },
+          { "name": "Custom Document 1", "required": false },
+          { "name": "Custom Document 2", "required": false },
+          { "name": "Custom Document 3", "required": false }
+        ]
+      }
+    ]
+  },
+  "i751": {
+    "id": "i751",
+    "title": "Application to Remove Conditions on Residence",
+    "subtitle": "Form I-751 — Petition to Remove Conditions on Residence",
+    "description": "removing the conditions on your 2-year conditional green card",
+    "forms": [
+      "G-1145 (E-notification)",
+      "I-751 (Petition to Remove Conditions on Residence)"
+    ],
+    "totalDocuments": 15,
+    "sections": [
+      {
+        "title": "Identity & Status Documents",
+        "documents": [
+          {
+            "name": "Copy of conditional green card (front and back)",
+            "required": true,
+            "hint": "Upload a clear scan of BOTH the front and back of your current 2-year conditional Permanent Resident Card (Form I-551). This shows you have conditional residence status."
+          },
+          {
+            "name": "Copy of petitioning spouse's U.S. citizenship or green card",
+            "required": true,
+            "hint": "Upload proof of your U.S. citizen or permanent resident spouse's status — e.g., U.S. passport bio page, Certificate of Naturalization, or both sides of their green card."
+          },
+          {
+            "name": "Government-issued photo ID (driver's license or state ID)",
+            "required": true,
+            "hint": "Upload a valid driver's license or state ID card for the conditional resident (the person filing to remove conditions)."
           }
+        ]
+      },
+      {
+        "title": "Marriage Evidence",
+        "documents": [
+          {
+            "name": "Marriage certificate",
+            "required": true,
+            "hint": "Upload the official marriage certificate from the authority where the marriage was performed. If not in English, include a certified translation."
+          },
+          {
+            "name": "Joint tax returns or IRS transcripts (last 2 years)",
+            "required": true,
+            "hint": "Upload your most recent 2 years of federal tax returns filed as 'Married Filing Jointly,' or IRS tax transcripts. This is one of the strongest proofs of a bona fide marriage."
+          },
+          {
+            "name": "Joint lease, mortgage, or property documents",
+            "required": false,
+            "hint": "Upload a signed joint lease or mortgage document listing both spouses' names at the same address."
+          },
+          {
+            "name": "Joint bank account statements (last 12 months)",
+            "required": false,
+            "hint": "Upload recent statements from a joint bank account showing both spouses' names. Ideally 6–12 months of statements."
+          },
+          {
+            "name": "Insurance policies naming both spouses (health, auto, life)",
+            "required": false,
+            "hint": "Upload insurance policy documents — health, auto, or life — that name both spouses as co-insured or beneficiary."
+          },
+          {
+            "name": "Utility bills with both names or at the same address",
+            "required": false,
+            "hint": "Upload utility bills (gas, electric, water, internet) listing both spouses' names or at the same address, confirming shared residence."
+          },
+          {
+            "name": "Notarized affidavits from family/friends attesting to bona fide marriage",
+            "required": false,
+            "hint": "Upload 2 or more notarized letters from friends or family who know you as a couple. Letters should describe specific shared experiences and how long they have known you together."
+          },
+          {
+            "name": "Birth certificates of children born to the marriage (if applicable)",
+            "required": false,
+            "hint": "If you have children born of this marriage, upload their birth certificates listing both parents' names."
+          }
+        ]
+      },
+      {
+        "title": "Photos",
+        "documents": [
+          {
+            "name": "Dated photos together over the course of the marriage",
+            "required": true,
+            "hint": "Upload a variety of dated photos showing you and your spouse together at different times and places since your marriage — holidays, family gatherings, vacations. Label each with date and location."
+          }
+        ]
+      },
+      {
+        "title": "Any other Additional Documents (Optional)",
+        "documents": [
+          {
+            "name": "Divorce decree(s) for any prior marriages",
+            "required": false,
+            "hint": "If either spouse was previously married, upload official divorce decrees or annulments for all prior marriages."
+          },
+          { "name": "Custom Document 1", "required": false },
+          { "name": "Custom Document 2", "required": false },
+          { "name": "Custom Document 3", "required": false }
         ]
       }
     ]
@@ -867,203 +1381,45 @@
   "i90": {
     "id": "i90",
     "title": "Application to Replace Permanent Resident Card",
-    "subtitle": "I-90 Green Card Renewal / Replacement",
-    "description": "renewing or replacing your existing Permanent Resident Card (Green Card)",
+    "subtitle": "Form I-90 — Green Card Renewal or Replacement",
+    "description": "renewing or replacing your expired, lost, stolen, or damaged Permanent Resident Card",
     "forms": [
-      "G-1145 (E-notification)",
       "I-90 (Application to Replace Permanent Resident Card)"
     ],
-    "totalDocuments": 13,
+    "totalDocuments": 5,
     "sections": [
       {
-        "title": "General Required Documents",
+        "title": "Identity & Status Documents",
         "documents": [
           {
-            "name": "Government-issued photo ID (passport, driver's license, etc.)",
-            "required": true
+            "name": "Copy of current or most recent green card (front and back)",
+            "required": true,
+            "hint": "Upload a clear scan of both the FRONT and BACK of your current or most recent Permanent Resident Card (Form I-551). If your card is lost or stolen, upload a copy of any prior green card you have, or a police report for the lost/stolen card."
+          },
+          {
+            "name": "Government-issued photo ID (driver's license or passport)",
+            "required": true,
+            "hint": "Upload a valid state driver's license, state ID card, or passport showing your full legal name, date of birth, and photo."
+          },
+          {
+            "name": "Two (2) passport-style photos",
+            "required": true,
+            "hint": "Upload two recent (within 6 months) passport-style photos — front-facing, white background, 2x2 inches. You can get these at any pharmacy, post office, or photo shop."
           }
         ]
       },
       {
-        "title": "If Lost, Stolen, Damaged or Destroyed",
+        "title": "Supporting Documents (If Applicable)",
         "documents": [
           {
-            "name": "Copy of the lost/stolen/destroyed green card (if available)",
-            "required": false
+            "name": "Police report (if card was lost or stolen)",
+            "required": false,
+            "hint": "If your card was lost or stolen, upload a copy of the police report filed with local law enforcement. This documents that the card is no longer in your possession."
           },
           {
-            "name": "Copy of Form I-797 (Notice of Action) or copy of immigrant visa (even if expired)",
-            "required": false
-          }
-        ]
-      },
-      {
-        "title": "If Card Expired or Expiring Soon",
-        "documents": [
-          {
-            "name": "Copy of expiring/expired green card",
-            "required": false
-          }
-        ]
-      },
-      {
-        "title": "If Card Issued but Never Received",
-        "documents": [
-          {
-            "name": "Copy of Form I-797 (Notice of Action showing approval)",
-            "required": false
-          },
-          {
-            "name": "Proof of mailing address",
-            "required": false
-          }
-        ]
-      },
-      {
-        "title": "If Incorrect Information on Card (USCIS Error)",
-        "documents": [
-          {
-            "name": "Incorrect green card",
-            "required": false
-          },
-          {
-            "name": "Evidence of correct information (birth certificate, passport, marriage certificate, court order)",
-            "required": false
-          }
-        ]
-      },
-      {
-        "title": "If Biographic Information Changed (Name)",
-        "documents": [
-          {
-            "name": "Copy of current green card",
-            "required": false
-          },
-          {
-            "name": "Legal document for name change (marriage certificate, divorce decree, court order)",
-            "required": false
-          }
-        ]
-      },
-      {
-        "title": "If Biographic Information Changed (Gender)",
-        "documents": [
-          {
-            "name": "Copy of current green card",
-            "required": false
-          },
-          {
-            "name": "Medical certification or court order (for gender change)",
-            "required": false
-          }
-        ]
-      },
-      {
-        "title": "If Turning 14 Years Old",
-        "documents": [
-          {
-            "name": "Copy of green card issued before age 14",
-            "required": false
-          }
-        ]
-      }
-    ]
-  },
-  "i751": {
-    "id": "i751",
-    "title": "Application for Removal of Conditions on Residence (Joint Filing)",
-    "subtitle": "I-751 Removal of Conditions on Residence",
-    "description": "removing the conditions on your 2-year conditional permanent resident card",
-    "forms": [
-      "G-1145 (E-notification)",
-      "I-751 (Petition to Remove Conditions)"
-    ],
-    "totalDocuments": 18,
-    "sections": [
-      {
-        "title": "Proof of Conditional Green Card",
-        "documents": [
-          {
-            "name": "Copy of the front and back of the conditional green card",
-            "required": true
-          },
-          {
-            "name": "Government-issued photo ID",
-            "required": true
-          }
-        ]
-      },
-      {
-        "title": "Marriage & Relationship Evidence",
-        "documents": [
-          {
-            "name": "Marriage certificate (original or certified copy)",
-            "required": true
-          },
-          {
-            "name": "Proof of termination of all prior marriages (if applicable)",
-            "required": false
-          },
-          {
-            "name": "Photos together (family events, holidays, trips) with captions",
-            "required": true
-          }
-        ]
-      },
-      {
-        "title": "At Least Eight (8) of the Following — Required",
-        "documents": [
-          {
-            "name": "Birth certificates of children born to the marriage (if any)",
-            "required": false
-          },
-          {
-            "name": "Joint lease/mortgage or property documents in both names",
-            "required": false
-          },
-          {
-            "name": "Proof of name change with Social Security and/or MVA",
-            "required": false
-          },
-          {
-            "name": "Joint bank account statements",
-            "required": false
-          },
-          {
-            "name": "Joint federal and state tax returns (or IRS transcripts)",
-            "required": false
-          },
-          {
-            "name": "Joint loan and/or credit card statements",
-            "required": false
-          },
-          {
-            "name": "Insurance policies naming each other",
-            "required": false
-          },
-          {
-            "name": "Utility bills showing both names",
-            "required": false
-          },
-          {
-            "name": "Notarized affidavits from family/friends (at least 2 letters)",
-            "required": false
-          },
-          {
-            "name": "Travel records (airline tickets, hotel reservations, passport stamps)",
-            "required": false
-          },
-          {
-            "name": "Health, auto, or life insurance listing spouse as beneficiary/dependent",
-            "required": false
-          },
-          {
-            "name": "Adoption records of children (if applicable)",
-            "required": false
-          },
-          {
-            "name": "Vehicle registrations in both names",
-            "required": false
+            "name": "Name change document (court order or marriage certificate, if applicable)",
+            "required": false,
+            "hint": "If you are requesting a new card with a different name, upload the legal document supporting the name change — e.g., a court order for name change or a marriage certificate."
           }
         ]
       }
@@ -1087,11 +1443,13 @@
         "documents": [
           {
             "name": "Copy of current Employment Authorization Document (EAD)",
-            "required": true
+            "required": true,
+            "hint": "This is the plastic card (Form I-766) issued by USCIS that shows you are authorized to work in the U.S. It displays your name, photo, alien number, and an expiration date. Upload a clear scan of both the FRONT and BACK of the card."
           },
           {
             "name": "Government-issued photo ID",
-            "required": true
+            "required": true,
+            "hint": "Accepted documents include a state driver's license, state ID card, or U.S. passport. The ID must show your full legal name, date of birth, and photo."
           }
         ]
       },
@@ -1100,11 +1458,13 @@
         "documents": [
           {
             "name": "Updated school, employment, or medical records",
-            "required": false
+            "required": false,
+            "hint": "Examples: school transcripts or enrollment letters, a letter from your employer on company letterhead, or medical visit records — all must show your name and a recent date."
           },
           {
             "name": "Updated rent, bills, or bank statements",
-            "required": false
+            "required": false,
+            "hint": "Examples: a signed lease agreement, utility bills (electricity, water, gas, internet), or bank account statements. These should show your name and a U.S. address within the last 12 months."
           }
         ]
       },
@@ -1113,12 +1473,22 @@
         "documents": [
           {
             "name": "Certified court dispositions for any new arrests, charges, or convictions",
-            "required": false
+            "required": false,
+            "hint": "If you had any new arrests, charges, or convictions since your last DACA approval, you must upload official court records showing the final outcome. These must be certified copies from the court clerk."
           },
           {
             "name": "Immigration documents (new proceedings, filings, or notices)",
-            "required": false
+            "required": false,
+            "hint": "Upload any new notices from USCIS or immigration court (e.g., Notice to Appear, removal orders, receipt notices) that were issued since your last DACA grant."
           }
+        ]
+      },
+      {
+        "title": "Any other Additional Documents (Optional)",
+        "documents": [
+          { "name": "Custom Document 1", "required": false },
+          { "name": "Custom Document 2", "required": false },
+          { "name": "Custom Document 3", "required": false }
         ]
       }
     ]
@@ -1139,11 +1509,13 @@
         "documents": [
           {
             "name": "Copy of valid permanent resident card (green card) — front and back",
-            "required": true
+            "required": true,
+            "hint": "Upload a clear scan of BOTH the front and back of your current Permanent Resident Card (Form I-551 / green card). It must be your most recently issued card."
           },
           {
             "name": "State-issued ID (driver's license or state ID)",
-            "required": true
+            "required": true,
+            "hint": "Upload a valid state driver's license or state ID card showing your full legal name, date of birth, and photo."
           }
         ]
       },
@@ -1152,19 +1524,23 @@
         "documents": [
           {
             "name": "Birth certificate (if needed for special cases)",
-            "required": false
+            "required": false,
+            "hint": "Your birth certificate may be required if your name, date of birth, or other information on USCIS records doesn't match your current documents. Include a certified English translation if not in English."
           },
           {
             "name": "Marriage certificate(s) (if applicable)",
-            "required": false
+            "required": false,
+            "hint": "If you are applying based on 3 years of marriage to a U.S. citizen, or if your current name differs from your green card, upload your marriage certificate(s)."
           },
           {
             "name": "Divorce decrees / annulments / death certificates for prior marriages",
-            "required": false
+            "required": false,
+            "hint": "Upload official divorce decrees, annulment papers, or death certificates for every prior marriage of yours or your current spouse, if applicable."
           },
           {
             "name": "Name change documents (if legally changed name)",
-            "required": false
+            "required": false,
+            "hint": "If you legally changed your name (by court order or marriage), upload the relevant court order or marriage certificate to explain the name discrepancy."
           }
         ]
       },
@@ -1173,15 +1549,18 @@
         "documents": [
           {
             "name": "Proof of continuous residence & physical presence (leases, mortgages, utility bills, employment records)",
-            "required": true
+            "required": true,
+            "hint": "Upload documents showing you have lived in the U.S. continuously for the required period (3 years if married to a U.S. citizen, or 5 years otherwise). Examples: lease agreements, mortgage statements, utility bills, employment records, or school records — all showing your U.S. address over the required period."
           },
           {
             "name": "Selective Service registration proof (male, age 18–26 if required)",
-            "required": false
+            "required": false,
+            "hint": "If you are male and were between 18–26 years old while living in the U.S., you must have registered with the Selective Service. Upload your registration acknowledgment letter or print your registration card from sss.gov."
           },
           {
             "name": "Certified tax transcripts or returns (esp. for marriage-based cases or tax issues)",
-            "required": false
+            "required": false,
+            "hint": "Upload IRS tax transcripts or copies of filed returns, especially if you are applying under the 3-year marriage rule or if you had any tax filing issues. Order IRS transcripts free at irs.gov/individuals/get-transcript."
           }
         ]
       },
@@ -1190,11 +1569,13 @@
         "documents": [
           {
             "name": "Proof of spouse's U.S. citizenship (3-year marriage rule)",
-            "required": false
+            "required": false,
+            "hint": "If applying under the 3-year rule (married to a U.S. citizen), upload proof of your spouse's citizenship: U.S. passport bio page, birth certificate, or Certificate of Naturalization."
           },
           {
             "name": "Proof of ongoing marital union (joint accounts, leases, children's birth certificates)",
-            "required": false
+            "required": false,
+            "hint": "Upload evidence proving you and your U.S. citizen spouse are still living together: joint bank account statements, joint lease or mortgage, or birth certificates of children listing both parents."
           }
         ]
       },
@@ -1203,12 +1584,22 @@
         "documents": [
           {
             "name": "Form N-426 — Request for Certification of Military/National Guard Service",
-            "required": false
+            "required": false,
+            "hint": "If you are a current or former member of the U.S. armed forces or National Guard, upload Form N-426, signed and certified by an authorized military official."
           },
           {
             "name": "Military records (DD Form 214, NGB Form 22, discharge papers)",
-            "required": false
+            "required": false,
+            "hint": "Upload your DD Form 214 (Certificate of Release or Discharge from Active Duty), NGB Form 22 (National Guard discharge), or any other official military discharge or service records."
           }
+        ]
+      },
+      {
+        "title": "Any other Additional Documents (Optional)",
+        "documents": [
+          { "name": "Custom Document 1", "required": false },
+          { "name": "Custom Document 2", "required": false },
+          { "name": "Custom Document 3", "required": false }
         ]
       }
     ]

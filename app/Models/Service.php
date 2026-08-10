@@ -9,10 +9,40 @@ class Service extends Model
 {
     use Auditable;
 
-    protected $fillable = ['name', 'description', 'price', 'tier'];
+    protected $fillable = [
+        'service_category_id', 
+        'title', 
+        'subtitle', 
+        'starting_price', 
+        'processing_time', 
+        'requirements', 
+        'is_popular', 
+        'order_index'
+    ];
+
+    protected $casts = [
+        'requirements' => 'array',
+        'is_popular' => 'boolean',
+    ];
+
+    public function category()
+    {
+        return $this->belongsTo(ServiceCategory::class, 'service_category_id');
+    }
+
+    public function packages()
+    {
+        return $this->hasMany(ServicePackage::class)->orderBy('order_index');
+    }
 
     public function purchases()
     {
         return $this->hasMany(Purchase::class);
+    }
+
+    public function dynamicForms()
+    {
+        return $this->belongsToMany(DynamicForm::class, 'dynamic_form_service')
+                    ->withPivot('is_required', 'condition_code');
     }
 }

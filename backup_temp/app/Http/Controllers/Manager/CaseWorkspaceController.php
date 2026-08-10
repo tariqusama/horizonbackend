@@ -1,0 +1,198 @@
+<?php
+
+namespace App\Http\Controllers\Manager;
+
+use App\Http\Controllers\Controller;
+use App\Models\Application;
+use App\Models\Document;
+use App\Models\Message;
+use App\Models\Ticket;
+use Illuminate\Http\Request;
+
+class CaseWorkspaceController extends Controller
+{
+    public function messages(Request $request, $applicationId)
+    {
+        $manager = $request->user();
+        $isAdmin = str_contains(strtolower((string) $manager->role), 'admin');
+
+        if (!$manager || (!str_contains(strtolower((string) $manager->role), 'manager') && !$isAdmin)) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $query = Application::where('id', $applicationId);
+        if (!$isAdmin) {
+            $query->where('manager_id', $manager->id);
+        }
+        $application = $query->firstOrFail();
+
+        $messages = Message::where('user_id', $application->user_id)
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        return response()->json($messages);
+    }
+
+    public function storeMessage(Request $request, $applicationId)
+    {
+        $manager = $request->user();
+        $isAdmin = str_contains(strtolower((string) $manager->role), 'admin');
+
+        if (!$manager || (!str_contains(strtolower((string) $manager->role), 'manager') && !$isAdmin)) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $request->validate([
+            'message' => 'nullable|string',
+            'file' => 'nullable|file|max:10240' // 10MB max
+        ]);
+
+        if (!$request->message && !$request->file('file')) {
+            return response()->json(['message' => 'Message or file is required'], 422);
+        }
+
+        $query = Application::where('id', $applicationId);
+        if (!$isAdmin) {
+            $query->where('manager_id', $manager->id);
+        }
+        $application = $query->firstOrFail();
+
+        $attachmentPath = null;
+        $attachmentName = null;
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $attachmentName = $file->getClientOriginalName();
+            $attachmentPath = $file->store('messages/attachments', 'public');
+        }
+
+        $message = Message::create([
+            'user_id' => $application->user_id,
+            'message' => $request->message ?? '',
+            'is_admin' => true,
+            'attachment_path' => $attachmentPath,
+            'attachment_name' => $attachmentName,
+        ]);
+
+        \Illuminate\Support\Facades\DB::table('notifications')->insert([
+            'id' => (string) \Illuminate\Support\Str::uuid(),
+            'type' => 'App\Notifications\NewMessageNotification',
+            'notifiable_type' => 'App\Models\User',
+            'notifiable_id' => $application->user_id,
+            'data' => json_encode([
+                'title' => 'New Message',
+                'text' => 'You have received a new message regarding your application.',
+                'type' => 'message'
+            ]),
+            'read_at' => null,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return response()->json($message, 201);
+    }
+
+    public function documents(Request $request, $applicationId)
+    {
+        $manager = $request->user();
+        $isAdmin = str_contains(strtolower((string) $manager->role), 'admin');
+
+        if (!$manager || (!str_contains(strtolower((string) $manager->role), 'manager') && !$isAdmin)) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $query = Application::where('id', $applicationId);
+        if (!$isAdmin) {
+            $query->where('manager_id', $manager->id);
+        }
+        $application = $query->firstOrFail();
+
+        return response()->json($application->documents()->orderBy('created_at', 'desc')->get());
+    }
+
+    public function requestDocuments(Request $request, $applicationId)
+    {
+        $manager = $request->user();
+        $isAdmin = str_contains(strtolower((string) $manager->role), 'admin');
+
+        if (!$manager || (!str_contains(strtolower((string) $manager->role), 'manager') && !$isAdmin)) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $request->validate([
+            'documents' => 'required|string',
+            'note' => 'nullable|string',
+        ]);
+
+        $query = Application::where('id', $applicationId);
+        if (!$isAdmin) {
+            $query->where('manager_id', $manager->id);
+        }
+        $application = $query->firstOrFail();
+
+        $requestEntry = [
+            'id' => 'req-' . time(),
+            'documents' => $request->documents,
+            'note' => $request->note ?? '',
+            'createdAt' => now()->toIso8601String(),
+        ];
+
+        $timeline = is_array($application->timeline) ? $application->timeline : [];
+        $timeline[] = [
+            'id' => 'req-' . time(),
+            'author' => $manager->email,
+            'text' => 'Document request: ' . $request->documents,
+            'created_at' => now()->toIso8601String(),
+        ];
+
+        $application->timeline = $timeline;
+        $application->save();
+
+        return response()->json(['request' => $requestEntry, 'application' => $application->load(['user', 'manager'])], 201);
+    }
+
+    public function escalate(Request $request, $applicationId)
+    {
+        $manager = $request->user();
+        $isAdmin = str_contains(strtolower((string) $manager->role), 'admin');
+
+        if (!$manager || (!str_contains(strtolower((string) $manager->role), 'manager') && !$isAdmin)) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $request->validate([
+            'reason' => 'required|string',
+        ]);
+
+        $query = Application::where('id', $applicationId);
+        if (!$isAdmin) {
+            $query->where('manager_id', $manager->id);
+        }
+        $application = $query->firstOrFail();
+
+        $application->is_escalated = true;
+        
+        $timeline = is_array($application->timeline) ? $application->timeline : [];
+        $timeline[] = [
+            'id' => 'esc-' . time(),
+            'author' => 'System',
+            'text' => 'Case escalated to Super Admin. Reason: ' . $request->reason,
+            'created_at' => now()->toIso8601String(),
+        ];
+        $application->timeline = $timeline;
+        $application->save();
+
+        $ticket = Ticket::create([
+            'ticket_id' => 'TKT-' . strtoupper(\Illuminate\Support\Str::random(8)),
+            'application_id' => $application->id,
+            'subject' => "Escalation for application #{$applicationId}",
+            'message' => "Escalated by manager {$manager->email}. Reason: {$request->reason}",
+            'status' => 'Open',
+            'priority' => 'High',
+            'user_id' => $application->user_id,
+            'assigned_to' => $manager->id,
+        ]);
+
+        return response()->json(['ticket' => $ticket->load(['user', 'assignee'])], 201);
+    }
+}

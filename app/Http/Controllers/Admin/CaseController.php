@@ -13,6 +13,45 @@ class CaseController extends Controller
     public function index()
     {
         $cases = Application::with(['user', 'manager'])->orderBy('created_at', 'desc')->get();
+
+        // Optimize dynamically linked forms to prevent N+1 query
+        $titles = $cases->pluck('title')->unique();
+        $formsByTitle = [];
+        foreach ($titles as $title) {
+            $formsByTitle[$title] = \App\Models\DynamicForm::whereHas('services', function ($q) use ($title) {
+                $q->where('title', $title);
+            })->with(['services' => function ($q) use ($title) {
+                $q->where('title', $title);
+            }])->get(['dynamic_forms.id', 'dynamic_forms.slug', 'dynamic_forms.name']);
+        }
+
+        foreach ($cases as $app) {
+            $answers = $app->questionnaire_answers ?? [];
+            $allForms = $formsByTitle[$app->title] ?? collect();
+            
+            $filteredForms = $allForms->filter(function ($form) use ($answers) {
+                $pivot = $form->services->first()?->pivot;
+                if (!$pivot) return false;
+                
+                if ($pivot->is_required) {
+                    return true;
+                }
+                
+                if ($pivot->condition_code) {
+                    return isset($answers[$pivot->condition_code]) && ($answers[$pivot->condition_code] === true || $answers[$pivot->condition_code] === 'true');
+                }
+                
+                return false;
+            })->map(function ($form) {
+                return [
+                    'slug' => $form->slug,
+                    'name' => $form->name
+                ];
+            })->values();
+
+            $app->linked_forms = $filteredForms;
+        }
+
         return response()->json($cases);
     }
 
@@ -103,5 +142,25 @@ class CaseController extends Controller
         }
 
         return response()->json(['message' => 'Request updated successfully', 'request' => $assignmentRequest->load(['application.user', 'manager'])]);
+    }
+
+    // PATCH /api/admin/cases/{id}/questionnaire
+    public function updateQuestionnaire(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'questionnaire_answers' => 'required|array',
+        ]);
+
+        $application = Application::findOrFail($id);
+        
+        // Merge with existing answers or replace
+        $existing = $application->questionnaire_answers ?? [];
+        $application->questionnaire_answers = array_merge($existing, $validated['questionnaire_answers']);
+        $application->save();
+
+        return response()->json([
+            'message' => 'Questionnaire answers updated successfully.',
+            'application' => $application
+        ]);
     }
 }

@@ -15,7 +15,10 @@ class DocumentController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $application = $user->applications()->latest()->first();
+        $application = Application::where('user_id', $user->id)
+            ->orWhereHas('participants', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })->latest()->first();
 
         if (!$application) {
             $application = Application::create([
@@ -44,7 +47,10 @@ class DocumentController extends Controller
         ]);
 
         $user = $request->user();
-        $application = $user->applications()->latest()->first();
+        $application = Application::where('user_id', $user->id)
+            ->orWhereHas('participants', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })->latest()->first();
 
         if (!$application) {
             $application = Application::create([
@@ -103,7 +109,8 @@ class DocumentController extends Controller
 
         $document = Document::findOrFail($id);
 
-        if ($document->application->user_id !== $request->user()->id) {
+        $isParticipant = $document->application->participants()->where('user_id', $request->user()->id)->exists();
+        if ($document->application->user_id !== $request->user()->id && !$isParticipant) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 

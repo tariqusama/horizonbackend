@@ -71,7 +71,9 @@ class AuthController extends Controller
             'goal' => 'nullable|string',
             'plan' => 'nullable|string',
             'amount' => 'nullable|numeric',
-            'addons' => 'nullable|array'
+            'addons' => 'nullable|array',
+            'questionnaire' => 'nullable|array',
+            'service_id' => 'nullable|string'
         ], [
             'email.unique' => 'Email already exists',
         ]);
@@ -112,6 +114,22 @@ class AuthController extends Controller
         }
 
         if ($request->goal) {
+            $formSlug = 'i-90';
+            if ($request->has('service_id') && $request->service_id) {
+                $map = [
+                    'i90' => 'i-90',
+                    'aos' => 'i-485',
+                    'i751' => 'i-751',
+                    'n400' => 'n-400',
+                    'fiance_petition' => 'i-129f',
+                    'spouse' => 'i-130',
+                    'child' => 'i-130',
+                    'parent' => 'i-130',
+                    'sibling' => 'i-130',
+                ];
+                $formSlug = $map[$request->service_id] ?? 'i-90';
+            }
+
             $application = $user->applications()->create([
                 'title' => $request->goal,
                 'amount' => $request->amount,
@@ -120,6 +138,8 @@ class AuthController extends Controller
                 'progress' => 'Application received',
                 'next_step' => 'Upload supporting documents',
                 'receipt_number' => 'MSC-' . rand(100, 999) . '-' . rand(10000, 99999),
+                'form_slug' => $formSlug,
+                'questionnaire_answers' => $request->has('questionnaire') ? $request->questionnaire : null,
                 'timeline' => [
                     ['step' => 'Application received', 'description' => 'USCIS has accepted your package.', 'complete' => true],
                     ['step' => 'Biometrics scheduled', 'description' => 'Waiting to schedule biometrics.', 'complete' => false],

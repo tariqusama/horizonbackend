@@ -32,6 +32,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/applications/{id}/i864', [ApplicationController::class, 'saveI864']);
     Route::post('/applications/{id}/n400', [ApplicationController::class, 'saveN400']);
     Route::post('/applications/{id}/submit', [ApplicationController::class, 'submit']);
+    Route::put('/applications/{id}/save-progress', [ApplicationController::class, 'saveFormData']);
+    Route::post('/applications/{id}/invites', [\App\Http\Controllers\ApplicationInviteController::class, 'store']);
+    Route::post('/applications/invites/{token}/accept', [\App\Http\Controllers\ApplicationInviteController::class, 'accept']);
     Route::get('/documents', [DocumentController::class, 'index']);
     Route::post('/documents/upload', [DocumentController::class, 'store']);
     Route::post('/documents/{id}/upload', [DocumentController::class, 'upload']);
@@ -47,6 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/manager/assigned-cases', [\App\Http\Controllers\ManagerController::class, 'assignedCases']);
     Route::get('/manager/unassigned-cases', [\App\Http\Controllers\ManagerController::class, 'unassignedCases']);
     Route::post('/manager/applications/{id}/request-assignment', [\App\Http\Controllers\ManagerController::class, 'requestAssignment']);
+    Route::post('/manager/applications/{id}/invite-beneficiary', [\App\Http\Controllers\ManagerController::class, 'inviteBeneficiary']);
     Route::put('/manager/applications/{id}', [\App\Http\Controllers\ManagerController::class, 'updateApplication']);
     Route::get('/manager/applications/{applicationId}/messages', [\App\Http\Controllers\Manager\CaseWorkspaceController::class, 'messages']);
     Route::post('/manager/applications/{applicationId}/messages', [\App\Http\Controllers\Manager\CaseWorkspaceController::class, 'storeMessage']);
@@ -61,11 +65,21 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/services', [\App\Http\Controllers\Admin\ServiceController::class, 'index']);
     Route::post('/payment/verify', [\App\Http\Controllers\PaymentController::class, 'verifyPayment']);
     Route::post('/support/tickets', [\App\Http\Controllers\TicketController::class, 'store']);
+    
+    // Public Guide Engine endpoint for fetching forms
+    Route::get('/guide-engine/forms/{slug}', [\App\Http\Controllers\PublicFormEngineController::class, 'getFormBySlug']);
 });
 
 Route::post('/auth/send-otp', [AuthController::class, 'sendOtp']);
 Route::post('/auth/verify-otp', [AuthController::class, 'verifyOtp']);
+Route::get('/beneficiary-invites/{token}', [\App\Http\Controllers\ApplicationController::class, 'getBeneficiaryInvite']);
+Route::post('/beneficiary-invites/{token}', [\App\Http\Controllers\ApplicationController::class, 'saveBeneficiaryInvite']);
+Route::get('/applications/invites/{token}', [\App\Http\Controllers\ApplicationInviteController::class, 'show']);
 Route::post('/newsletter/subscribe', [\App\Http\Controllers\NewsletterController::class, 'subscribe']);
+
+Route::get('/public/services', [\App\Http\Controllers\PublicServiceController::class, 'index']);
+Route::get('/public/signup-pathways', [\App\Http\Controllers\PublicSignupController::class, 'getPathways']);
+Route::post('/public/signup-pricing', [\App\Http\Controllers\PublicSignupController::class, 'getPricing']);
 
 Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
     Route::get('/clients', [\App\Http\Controllers\AdminController::class, 'getClients']);
@@ -88,6 +102,7 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::get('/assignment-requests', [\App\Http\Controllers\Admin\CaseController::class, 'getRequests']);
     Route::get('/assignment-requests/{id}', [\App\Http\Controllers\Admin\CaseController::class, 'showRequest']);
     Route::put('/assignment-requests/{id}', [\App\Http\Controllers\Admin\CaseController::class, 'updateRequest']);
+    Route::patch('/cases/{id}/questionnaire', [\App\Http\Controllers\Admin\CaseController::class, 'updateQuestionnaire']);
 
     // Revenue & Services
     Route::post('/services', [\App\Http\Controllers\Admin\ServiceController::class, 'store']);
@@ -121,6 +136,38 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::get('/dashboard/activity', [\App\Http\Controllers\Admin\AnalyticsController::class, 'getRecentActivity']);
     Route::get('/analytics/data', [\App\Http\Controllers\Admin\AnalyticsController::class, 'getAnalyticsData']);
     Route::get('/control-center/data', [\App\Http\Controllers\Admin\AnalyticsController::class, 'getControlCenterData']);
+    Route::get('/staff-performance/data', [\App\Http\Controllers\Admin\AnalyticsController::class, 'getStaffPerformanceData']);
+
+    // Checklists
+    Route::get('/checklists', [\App\Http\Controllers\Admin\ChecklistController::class, 'index']);
+    Route::post('/checklists', [\App\Http\Controllers\Admin\ChecklistController::class, 'store']);
+    Route::get('/checklists/{id}', [\App\Http\Controllers\Admin\ChecklistController::class, 'show']);
+    Route::put('/checklists/{id}', [\App\Http\Controllers\Admin\ChecklistController::class, 'update']);
+    Route::delete('/checklists/{id}', [\App\Http\Controllers\Admin\ChecklistController::class, 'destroy']);
+
+    // Signup Setup
+    Route::get('/signup-goals', [\App\Http\Controllers\Admin\SignupSetupController::class, 'getGoals']);
+    Route::post('/signup-goals', [\App\Http\Controllers\Admin\SignupSetupController::class, 'storeGoal']);
+    Route::put('/signup-goals/{id}', [\App\Http\Controllers\Admin\SignupSetupController::class, 'updateGoal']);
+    Route::delete('/signup-goals/{id}', [\App\Http\Controllers\Admin\SignupSetupController::class, 'destroyGoal']);
+
+    Route::get('/signup-goals/{goalId}/questions', [\App\Http\Controllers\Admin\SignupSetupController::class, 'getQuestions']);
+    Route::post('/signup-goals/{goalId}/questions', [\App\Http\Controllers\Admin\SignupSetupController::class, 'storeQuestion']);
+    Route::put('/signup-questions/{id}', [\App\Http\Controllers\Admin\SignupSetupController::class, 'updateQuestion']);
+    Route::delete('/signup-questions/{id}', [\App\Http\Controllers\Admin\SignupSetupController::class, 'destroyQuestion']);
+
+    // Guide Engine Form Builder
+    Route::get('/guide-engine/forms', [\App\Http\Controllers\Admin\FormBuilderController::class, 'getForms']);
+    Route::post('/guide-engine/forms', [\App\Http\Controllers\Admin\FormBuilderController::class, 'createForm']);
+    Route::post('/guide-engine/forms/{id}/connect', [\App\Http\Controllers\Admin\FormBuilderController::class, 'connectForm']);
+    Route::post('/guide-engine/forms/{id}/unlink', [\App\Http\Controllers\Admin\FormBuilderController::class, 'unlinkForm']);
+    Route::post('/guide-engine/forms/{id}/toggle-required', [\App\Http\Controllers\Admin\FormBuilderController::class, 'toggleRequired']);
+    Route::get('/guide-engine/forms/{id}', [\App\Http\Controllers\Admin\FormBuilderController::class, 'getForm']);
+    Route::post('/guide-engine/forms/{id}/sections', [\App\Http\Controllers\Admin\FormBuilderController::class, 'addSection']);
+    Route::post('/guide-engine/sections/{id}/questions', [\App\Http\Controllers\Admin\FormBuilderController::class, 'addQuestion']);
+    Route::delete('/guide-engine/sections/{id}', [\App\Http\Controllers\Admin\FormBuilderController::class, 'deleteSection']);
+    Route::put('/guide-engine/questions/{id}', [\App\Http\Controllers\Admin\FormBuilderController::class, 'updateQuestion']);
+    Route::delete('/guide-engine/questions/{id}', [\App\Http\Controllers\Admin\FormBuilderController::class, 'deleteQuestion']);
 });
 
 Route::post('/payment/process', [\App\Http\Controllers\PaymentController::class, 'processPayment']);
