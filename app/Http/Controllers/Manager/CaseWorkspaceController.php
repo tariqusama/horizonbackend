@@ -8,6 +8,8 @@ use App\Models\Document;
 use App\Models\Message;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewMessage;
 
 class CaseWorkspaceController extends Controller
 {
@@ -88,6 +90,18 @@ class CaseWorkspaceController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
+        try {
+            $clientUser = \App\Models\User::find($application->user_id);
+            if ($clientUser) {
+                Mail::to($clientUser->email)->send(new NewMessage([
+                    'sender_name' => $manager->name . ' (Case Manager)',
+                    'message' => $request->message ?? 'You have received a new message or attachment.'
+                ]));
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('New message email to client failed: ' . $e->getMessage());
+        }
 
         return response()->json($message, 201);
     }

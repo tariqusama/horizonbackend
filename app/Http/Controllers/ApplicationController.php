@@ -92,6 +92,37 @@ class ApplicationController extends Controller
             })->unique('slug')->values();
 
             $app->linked_forms = $filteredForms;
+
+            // Compute and populate legacy amount dynamically from the services table if it is missing
+            if (is_null($app->amount)) {
+                $service = null;
+                if ($app->service_id) {
+                    $service = \App\Models\Service::with('packages')->find($app->service_id);
+                } else if ($app->title) {
+                    // Try to match the legacy title against Service table
+                    $service = \App\Models\Service::with('packages')->where('title', $app->title)->first();
+                }
+
+                if ($service && $app->subtitle) {
+                    $isPremium = str_contains($app->subtitle, 'Premium');
+                    $isAdvanced = str_contains($app->subtitle, 'Advanced');
+                    
+                    $packageName = 'Basic Package';
+                    if ($isPremium) {
+                        $packageName = 'Premium Package';
+                    } elseif ($isAdvanced) {
+                        $packageName = 'Advanced Package';
+                    }
+                    
+                    $package = $service->packages->where('name', $packageName)->first();
+                    if ($package) {
+                        $app->amount = $package->price;
+                    } elseif ($service->starting_price) {
+                        // Fallback to base service price if package is missing
+                        $app->amount = floatval(str_replace(['$', ','], '', $service->starting_price));
+                    }
+                }
+            }
         }
 
         return response()->json($applications);

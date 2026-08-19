@@ -342,13 +342,19 @@ class FormN400Seeder extends Seeder
         $this->addQ($sec14, '1. Family Name (Last Name)', 'additionalLastName');
         $this->addQ($sec14, '1. Given Name (First Name)', 'additionalFirstName');
         $this->addQ($sec14, '1. Middle (if applicable)', 'additionalMiddleName');
-        $this->addQ($sec14, '2. A-Number', 'additionalANumber');
-        for ($i = 3; $i <= 5; $i++) {
-            $this->addQ($sec14, "{$i}. Page Number", "additional{$i}Page");
-            $this->addQ($sec14, "{$i}. Part Number", "additional{$i}Part");
-            $this->addQ($sec14, "{$i}. Item Number", "additional{$i}Item");
-            $this->addQ($sec14, "{$i}. Additional Information", "additional{$i}Info", 'textarea');
-        }
+        
+        $this->addQ($sec14, '2. Page Number', 'additional1Page');
+        $this->addQ($sec14, '2. Part Number', 'additional1Part');
+        $this->addQ($sec14, '2. Item Number', 'additional1Item');
+        $this->addQ($sec14, 'Additional Information 1', 'additional1Info', 'textarea');
+
+        // Part 15 and 16
+        $sec15 = $form->sections()->create(['title' => 'Part 15 and 16. Signature at Interview and Oath of Allegiance', 'order' => 15]);
+        $this->addQ($sec15, 'Do not complete Parts 15. or 16. until the USCIS officer instructs you to do so at the interview.', 'headingDoNotComplete', 'heading');
+        $this->addQ($sec15, 'Applicant\'s Signature at Interview', 'interviewApplicantSignature');
+        $this->addQ($sec15, 'Date of Signature (mm/dd/yyyy)', 'interviewApplicantDate', 'date');
+        $this->addQ($sec15, 'Oath of Allegiance: Applicant\'s Signature', 'oathApplicantSignature');
+        $this->addQ($sec15, 'Oath of Allegiance: Date of Signature (mm/dd/yyyy)', 'oathApplicantDate', 'date');
 
         echo "Successfully seeded N-400 form!\n";
     }

@@ -24,6 +24,8 @@ return [
         'http://127.0.0.1:3000',
         'https://horizons-olive.vercel.app',
         'https://horizon.co3.solutions',
+        'https://horizonpathways.us',
+        'https://www.horizonpathways.us',
     ],
 
     'allowed_origins_patterns' => [],

@@ -53,8 +53,9 @@ class PublicSignupController extends Controller
         $serviceId = $goal->default_service_id;
 
         foreach ($goal->questions as $index => $question) {
-            if (isset($answers[$index]) && isset($question->service_mappings) && is_array($question->service_mappings)) {
-                $userAnswer = $answers[$index];
+            $frontendAnswerIndex = $index + 1; // Frontend answers are 1-indexed based on currentStep
+            if (isset($answers[$frontendAnswerIndex]) && isset($question->service_mappings) && is_array($question->service_mappings)) {
+                $userAnswer = $answers[$frontendAnswerIndex];
                 if (isset($question->service_mappings[$userAnswer])) {
                     $serviceId = $question->service_mappings[$userAnswer];
                 }
