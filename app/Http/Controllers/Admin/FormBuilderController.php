@@ -170,6 +170,38 @@ class FormBuilderController extends Controller
         return response()->json($question->load('options'), 200);
     }
     
+    // PUT /api/admin/guide-engine/forms/{id}/reorder-sections
+    public function reorderSections(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'sections' => 'required|array',
+            'sections.*.id' => 'required|integer',
+            'sections.*.order' => 'required|integer'
+        ]);
+
+        foreach ($validated['sections'] as $sec) {
+            DynamicFormSection::where('id', $sec['id'])->where('dynamic_form_id', $id)->update(['order' => $sec['order']]);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    // PUT /api/admin/guide-engine/sections/{id}/reorder-questions
+    public function reorderQuestions(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'questions' => 'required|array',
+            'questions.*.id' => 'required|integer',
+            'questions.*.order' => 'required|integer'
+        ]);
+
+        foreach ($validated['questions'] as $q) {
+            DynamicFormQuestion::where('id', $q['id'])->where('dynamic_form_section_id', $id)->update(['order' => $q['order']]);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
     // DELETE endpoints
     public function deleteSection($id)
     {

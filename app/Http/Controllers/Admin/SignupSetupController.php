@@ -62,6 +62,7 @@ class SignupSetupController extends Controller
     {
         $validated = $request->validate([
             'question_text' => 'required|string',
+            'depends_on_answer' => 'nullable|string',
             'options' => 'nullable|array',
             'disqualifying_options' => 'nullable|array',
             'skip_to_end_options' => 'nullable|array',
@@ -81,6 +82,7 @@ class SignupSetupController extends Controller
 
         $validated = $request->validate([
             'question_text' => 'required|string',
+            'depends_on_answer' => 'nullable|string',
             'options' => 'nullable|array',
             'disqualifying_options' => 'nullable|array',
             'skip_to_end_options' => 'nullable|array',

@@ -9,6 +9,7 @@ class SignupQuestion extends Model
     protected $fillable = [
         'signup_goal_id', 
         'question_text', 
+        'depends_on_answer',
         'options', 
         'disqualifying_options', 
         'skip_to_end_options',

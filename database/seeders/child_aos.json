@@ -1,0 +1,238 @@
+{
+    "id": "child_aos",
+    "title": "Application for Child Adjustment of Status (AOS)",
+    "subtitle": "Child Green Card (Adjustment of Status)",
+    "description": "adjusting your child's status to permanent resident while they are in the United States",
+    "forms": [
+        "G-1145",
+        "I-130",
+        "I-485",
+        "I-864",
+        "Optional: I-765 (EAD), I-131 (Advance Parole)"
+    ],
+    "totalDocuments": 32,
+    "sections": [
+        {
+            "title": "Petitioner (U.S. Citizen or Green Card Holder) Documents",
+            "documents": [
+                {
+                    "name": "Proof of U.S. citizenship OR green card (front and back)",
+                    "required": true,
+                    "hint": "U.S. citizens: upload your U.S. passport bio page, birth certificate, or Certificate of Naturalization. Green card holders: upload both the FRONT and BACK of your Permanent Resident Card (Form I-551)."
+                },
+                {
+                    "name": "Government-issued photo ID",
+                    "required": true,
+                    "hint": "Upload a valid driver's license, state ID, or U.S. passport showing your full legal name, date of birth, and photo."
+                }
+            ]
+        },
+        {
+            "title": "Proof of Relationship",
+            "documents": [
+                {
+                    "name": "Child's birth certificate showing sponsoring parent's name",
+                    "required": true,
+                    "hint": "Upload the child's official birth certificate listing your name as the parent. Include a certified English translation if the certificate is not in English."
+                },
+                {
+                    "name": "If adopted: final adoption decree + proof of legal custody and residency before age 16",
+                    "required": false,
+                    "hint": "Upload the final court adoption decree plus documentation showing the child lived with you before their 16th birthday (e.g., school enrollment records or medical records at the same address)."
+                },
+                {
+                    "name": "If stepchild: marriage certificate between parent and stepparent + proof of prior marriage terminations",
+                    "required": false,
+                    "hint": "Upload the marriage certificate between the petitioning step-parent and the child's biological parent, and any divorce decrees or death certificates for prior marriages."
+                },
+                {
+                    "name": "If father & child born out of wedlock: legitimation proof or emotional\/financial relationship evidence",
+                    "required": false,
+                    "hint": "Upload a court order establishing paternity, acknowledgment of paternity records, or documented evidence of an ongoing parent-child relationship."
+                },
+                {
+                    "name": "Paternal or maternal DNA test result from a USCIS-approved lab",
+                    "required": false,
+                    "hint": "If other documents cannot establish the parent-child relationship, a DNA test from an AABB-accredited lab may be submitted. Contact us before arranging a DNA test."
+                }
+            ]
+        },
+        {
+            "title": "At Least Five (5) of the Following \u2014 Required",
+            "documents": [
+                {
+                    "name": "Medical\/health records showing parent and child's names",
+                    "required": false,
+                    "hint": "Examples: vaccination records or health insurance cards listing both parent and child."
+                },
+                {
+                    "name": "Church or religious records listing parent and child's name",
+                    "required": false,
+                    "hint": "Examples: baptism certificate or religious school enrollment records showing both parent and child."
+                },
+                {
+                    "name": "Insurance records naming both petitioner and beneficiary",
+                    "required": false,
+                    "hint": "Upload insurance policies (health, life) listing both the petitioner and the child."
+                },
+                {
+                    "name": "Employment records showing parent and child's names",
+                    "required": false,
+                    "hint": "Examples: employer benefit enrollment forms listing the child as a dependent."
+                },
+                {
+                    "name": "Financial records (tax returns) listing parent and child's name",
+                    "required": false,
+                    "hint": "Upload IRS Form 1040 pages listing the child as a dependent."
+                },
+                {
+                    "name": "Census or tribal records in both names",
+                    "required": false,
+                    "hint": "Upload census household records or tribal documents listing both parent and child."
+                },
+                {
+                    "name": "Government records or ID documents showing both names",
+                    "required": false,
+                    "hint": "Examples: school enrollment records listing the petitioning parent, or any government document tying parent and child."
+                },
+                {
+                    "name": "Proof of ongoing parent-child relationship (money transfers\/remittance)",
+                    "required": false,
+                    "hint": "Upload money transfer records or remittances to the child or their caretaker, showing ongoing financial support."
+                }
+            ]
+        },
+        {
+            "title": "Child's Identity & Immigration Documents",
+            "documents": [
+                {
+                    "name": "Child's birth certificate (with certified English translation if needed)",
+                    "required": true,
+                    "hint": "Upload the child's official birth certificate. If not in English, include a full certified English translation."
+                },
+                {
+                    "name": "Passport biographic page",
+                    "required": true,
+                    "hint": "Upload the child's current passport bio page showing full name, date of birth, nationality, and photo."
+                },
+                {
+                    "name": "Form I-94 Arrival\/Departure Record",
+                    "required": true,
+                    "hint": "Download the child's I-94 from cbp.dhs.gov\/I94 and upload the printout showing entry date, visa class, and authorized stay."
+                },
+                {
+                    "name": "Proof of lawful entry (visa, admission stamp, or parole documents)",
+                    "required": true,
+                    "hint": "Upload the visa stamp in the child's passport, a CBP entry stamp, or CBP\/USCIS parole authorization documents."
+                }
+            ]
+        },
+        {
+            "title": "Petitioner Financial Affidavit Documents",
+            "documents": [
+                {
+                    "name": "Most recent 3 years IRS tax return, transcript, or Form 1040 with W-2s",
+                    "required": true,
+                    "hint": "Upload your last 3 years of federal tax returns, including all W-2s and 1099s."
+                },
+                {
+                    "name": "Employment verification letter and\/or 6 months' pay stubs OR proof of self-employment",
+                    "required": true,
+                    "hint": "Upload an employer letter and your last 6 months of pay stubs. If self-employed, upload business tax returns and a signed self-employment income statement."
+                },
+                {
+                    "name": "6 months' bank statements",
+                    "required": false,
+                    "hint": "Upload the most recent 6 months of personal bank account statements."
+                },
+                {
+                    "name": "Evidence of assets (if income is insufficient)",
+                    "required": false,
+                    "hint": "Upload property deeds, investment\/brokerage statements, or vehicle titles if additional asset evidence is needed."
+                }
+            ]
+        },
+        {
+            "title": "Joint Sponsor Documents (If Applicable)",
+            "documents": [
+                {
+                    "name": "Joint sponsor: proof of U.S. citizenship OR green card",
+                    "required": false,
+                    "hint": "Upload citizenship proof or both sides of the green card for the joint sponsor."
+                },
+                {
+                    "name": "Joint sponsor: government-issued photo ID",
+                    "required": false,
+                    "hint": "Upload a valid photo ID for the joint sponsor."
+                },
+                {
+                    "name": "Joint sponsor: most recent 3 years IRS tax return or transcript",
+                    "required": false,
+                    "hint": "Upload the last 3 years of federal tax returns or IRS transcripts for the joint sponsor."
+                },
+                {
+                    "name": "Joint sponsor: 1099s and\/or W-2s for the most recent tax year",
+                    "required": false,
+                    "hint": "Upload all W-2 and 1099 forms for the joint sponsor for the most recent tax year."
+                },
+                {
+                    "name": "Joint sponsor: employment verification\/6 mo pay stubs OR proof of self-employment",
+                    "required": false,
+                    "hint": "Upload an employer letter and 6 months of pay stubs, or self-employment tax records, for the joint sponsor."
+                }
+            ]
+        },
+        {
+            "title": "Household Member Income Documents (If Applicable)",
+            "documents": [
+                {
+                    "name": "Household member: proof of U.S. citizenship OR green card",
+                    "required": false,
+                    "hint": "Upload citizenship proof or both sides of the green card for the contributing household member."
+                },
+                {
+                    "name": "Household member: government-issued photo ID",
+                    "required": false,
+                    "hint": "Upload a valid photo ID for the contributing household member."
+                },
+                {
+                    "name": "Household member: most recent 3 years IRS tax return or transcript",
+                    "required": false,
+                    "hint": "Upload the last 3 years of tax returns or IRS transcripts for the contributing household member."
+                },
+                {
+                    "name": "Household member: 1099s and\/or W-2s for the most recent tax year",
+                    "required": false,
+                    "hint": "Upload all income tax forms for the contributing household member for the most recent year."
+                },
+                {
+                    "name": "Household member: employment verification\/6 mo pay stubs OR proof of self-employment",
+                    "required": false,
+                    "hint": "Upload an employer letter and 6 months of pay stubs, or self-employment records, for the contributing household member."
+                }
+            ]
+        },
+        {
+            "title": "Any Other Additional Documents (Optional)",
+            "documents": [
+                {
+                    "name": "Marriage certificate, divorce decree, adoption decree, or court order for name changes (if applicable)",
+                    "required": false,
+                    "hint": "Upload legal documents that explain any name discrepancies or changes in family status."
+                },
+                {
+                    "name": "Custom Document 1",
+                    "required": false
+                },
+                {
+                    "name": "Custom Document 2",
+                    "required": false
+                },
+                {
+                    "name": "Custom Document 3",
+                    "required": false
+                }
+            ]
+        }
+    ]
+}

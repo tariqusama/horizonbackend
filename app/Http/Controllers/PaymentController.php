@@ -40,11 +40,13 @@ class PaymentController extends Controller
                     'payment_method' => $request->payment_method_id,
                     'confirmation_method' => 'manual',
                     'confirm' => true,
-                    'return_url' => env('FRONTEND_URL', 'http://localhost:3000') . '/dashboard?payment=success',
+                    'payment_method_types' => ['card'],
                 ]);
 
-                if ($paymentIntent->status == 'requires_action' &&
-                    $paymentIntent->next_action->type == 'use_stripe_sdk') {
+                if (
+                    $paymentIntent->status == 'requires_action' &&
+                    $paymentIntent->next_action->type == 'use_stripe_sdk'
+                ) {
                     return response()->json([
                         'status' => 'requires_action',
                         'client_secret' => $paymentIntent->client_secret
@@ -59,19 +61,22 @@ class PaymentController extends Controller
                 $session = \Stripe\Checkout\Session::create([
                     'payment_method_types' => ['card'],
                     'customer_email' => $request->email,
-                    'line_items' => [[
-                        'price_data' => [
-                            'currency' => 'usd',
-                            'product_data' => [
-                                'name' => $request->plan,
-                                'description' => $request->goal,
+                    'line_items' => [
+                        [
+                            'price_data' => [
+                                'currency' => 'usd',
+                                'product_data' => [
+                                    'name' => $request->plan,
+                                    'description' => $request->goal,
+                                ],
+                                'unit_amount' => $amountInCents,
                             ],
-                            'unit_amount' => $amountInCents,
-                        ],
-                        'quantity' => 1,
-                    ]],
+                            'quantity' => 1,
+                        ]
+                    ],
                     'mode' => 'payment',
-                    'success_url' => env('FRONTEND_URL', 'http://localhost:3000') . '/dashboard?session_id={CHECKOUT_SESSION_ID}',
+                    'allow_promotion_codes' => true,
+                    'success_url' => env('FRONTEND_URL', 'http://localhost:3000') . '/welcome?session_id={CHECKOUT_SESSION_ID}',
                     'cancel_url' => env('FRONTEND_URL', 'http://localhost:3000') . '/dashboard',
                 ]);
 

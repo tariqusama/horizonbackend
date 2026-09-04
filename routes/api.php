@@ -81,6 +81,12 @@ Route::get('/public/services', [\App\Http\Controllers\PublicServiceController::c
 Route::get('/public/signup-pathways', [\App\Http\Controllers\PublicSignupController::class, 'getPathways']);
 Route::post('/public/signup-pricing', [\App\Http\Controllers\PublicSignupController::class, 'getPricing']);
 
+Route::get('/stats/signups', function () {
+    return response()->json([
+        'count' => \App\Models\User::where('role', 'user')->count()
+    ]);
+});
+
 Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
     Route::get('/clients', [\App\Http\Controllers\AdminController::class, 'getClients']);
     Route::get('/applications', [\App\Http\Controllers\AdminController::class, 'getApplications']);
@@ -164,7 +170,9 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::post('/guide-engine/forms/{id}/toggle-required', [\App\Http\Controllers\Admin\FormBuilderController::class, 'toggleRequired']);
     Route::get('/guide-engine/forms/{id}', [\App\Http\Controllers\Admin\FormBuilderController::class, 'getForm']);
     Route::post('/guide-engine/forms/{id}/sections', [\App\Http\Controllers\Admin\FormBuilderController::class, 'addSection']);
+    Route::put('/guide-engine/forms/{id}/reorder-sections', [\App\Http\Controllers\Admin\FormBuilderController::class, 'reorderSections']);
     Route::post('/guide-engine/sections/{id}/questions', [\App\Http\Controllers\Admin\FormBuilderController::class, 'addQuestion']);
+    Route::put('/guide-engine/sections/{id}/reorder-questions', [\App\Http\Controllers\Admin\FormBuilderController::class, 'reorderQuestions']);
     Route::delete('/guide-engine/sections/{id}', [\App\Http\Controllers\Admin\FormBuilderController::class, 'deleteSection']);
     Route::put('/guide-engine/questions/{id}', [\App\Http\Controllers\Admin\FormBuilderController::class, 'updateQuestion']);
     Route::delete('/guide-engine/questions/{id}', [\App\Http\Controllers\Admin\FormBuilderController::class, 'deleteQuestion']);

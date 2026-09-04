@@ -18,6 +18,7 @@ class PublicSignupController extends Controller
             $pathways[$goal->title] = $goal->questions->map(function ($q) {
                 return [
                     'question' => $q->question_text,
+                    'depends_on_answer' => $q->depends_on_answer,
                     'options' => $q->options,
                     'disqualifyingOptions' => $q->disqualifying_options,
                     'skipToEndOptions' => $q->skip_to_end_options,
@@ -43,6 +44,7 @@ class PublicSignupController extends Controller
         if (!$goal) {
             return response()->json([
                 'title' => "Choose Your Plan",
+                'service_id' => null,
                 'basic' => "$349.99",
                 'advanced' => "$449.99",
                 'premium' => "$599.99",
@@ -52,8 +54,21 @@ class PublicSignupController extends Controller
 
         $serviceId = $goal->default_service_id;
 
-        foreach ($goal->questions as $index => $question) {
-            $frontendAnswerIndex = $index + 1; // Frontend answers are 1-indexed based on currentStep
+        // Frontend answers is a map where key is the 1-indexed overall step number.
+        // Wait, answers[1] could be the answer to the first question, but if a question is skipped,
+        // answers[3] might be the answer to the 2nd visible question.
+        // Let's iterate through the visible questions!
+        
+        // Let's filter questions exactly like the frontend does:
+        $visibleQuestions = [];
+        foreach ($goal->questions as $q) {
+            if (empty($q->depends_on_answer) || in_array($q->depends_on_answer, $answers)) {
+                $visibleQuestions[] = $q;
+            }
+        }
+
+        foreach ($visibleQuestions as $index => $question) {
+            $frontendAnswerIndex = $index + 1; // Since currentStep is 1-indexed
             if (isset($answers[$frontendAnswerIndex]) && isset($question->service_mappings) && is_array($question->service_mappings)) {
                 $userAnswer = $answers[$frontendAnswerIndex];
                 if (isset($question->service_mappings[$userAnswer])) {
@@ -66,6 +81,7 @@ class PublicSignupController extends Controller
             // Fallback for missing service
             return response()->json([
                 'title' => $goalTitle,
+                'service_id' => null,
                 'basic' => "$349.99",
                 'advanced' => "$449.99",
                 'premium' => "$599.99",
@@ -78,6 +94,7 @@ class PublicSignupController extends Controller
         if (!$service) {
             return response()->json([
                 'title' => $goalTitle,
+                'service_id' => null,
                 'basic' => "$349.99",
                 'advanced' => "$449.99",
                 'premium' => "$599.99",
@@ -91,6 +108,7 @@ class PublicSignupController extends Controller
 
         return response()->json([
             'title' => $service->title,
+            'service_id' => $service->id,
             'basic' => $basic ? "$" . number_format($basic->price, 2) : "$349.99",
             'advanced' => $advanced ? "$" . number_format($advanced->price, 2) : "$449.99",
             'premium' => $premium ? "$" . number_format($premium->price, 2) : "$599.99",

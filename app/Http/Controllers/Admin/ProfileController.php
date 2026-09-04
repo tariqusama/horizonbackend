@@ -24,6 +24,7 @@ class ProfileController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $user->id,
             'phone' => 'nullable|string|max:20',
+            'country' => 'nullable|string',
             'password' => 'nullable|string|min:8|confirmed',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'email_notifications' => 'sometimes|boolean',
@@ -34,6 +35,7 @@ class ProfileController extends Controller
         $user->name = $validated['name'];
         $user->email = $validated['email'];
         $user->phone = $validated['phone'] ?? $user->phone;
+        $user->country = $validated['country'] ?? $user->country;
         
         if (isset($validated['email_notifications'])) {
             $user->email_notifications = $validated['email_notifications'];

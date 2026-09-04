@@ -40,28 +40,28 @@ class SignupPathwaysSeeder extends Seeder
                     ]
                 ]
             ],
-            "Bring a fiancé(e) to the U.S." => [
+            "Bring a fiancé(e) or spouse/relative to the U.S." => [
                 'image_url' => "url('https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=80')",
                 'order_index' => 2,
-                'questions' => []
-            ],
-            "Bring a spouse to the U.S." => [
-                'image_url' => "url('https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=80')",
-                'order_index' => 3,
-                'questions' => []
-            ],
-            "Bring a sibling to the U.S." => [
-                'image_url' => "url('https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=80')",
-                'order_index' => 4,
-                'questions' => []
-            ],
-            "Bring another relative to the U.S." => [
-                'image_url' => "url('https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=80')",
-                'order_index' => 5,
                 'questions' => [
                     [
                         'question_text' => "Who do you want to bring to the United States?",
-                        'options' => ["Child/Step Child", "Parent"],
+                        'depends_on_answer' => null,
+                        'options' => ["Fiancé(e)", "Spouse", "Child / Stepchild", "Parent", "Sibling"],
+                        'disqualifying_options' => null,
+                        'skip_to_end_options' => null
+                    ],
+                    [
+                        'question_text' => "Are you currently married to your fiancé(e)?",
+                        'depends_on_answer' => "Fiancé(e)",
+                        'options' => ["Yes", "No"],
+                        'disqualifying_options' => ["Yes"],
+                        'skip_to_end_options' => null
+                    ],
+                    [
+                        'question_text' => "Is your spouse currently inside or outside the United States?",
+                        'depends_on_answer' => "Spouse",
+                        'options' => ["Inside the U.S.", "Outside the U.S."],
                         'disqualifying_options' => null,
                         'skip_to_end_options' => null
                     ]
@@ -217,6 +217,7 @@ class SignupPathwaysSeeder extends Seeder
             foreach ($data['questions'] as $qIndex => $qData) {
                 $goal->questions()->create([
                     'question_text' => $qData['question_text'],
+                    'depends_on_answer' => $qData['depends_on_answer'] ?? null,
                     'options' => $qData['options'],
                     'disqualifying_options' => $qData['disqualifying_options'],
                     'skip_to_end_options' => $qData['skip_to_end_options'],
@@ -232,9 +233,6 @@ class SignupPathwaysSeeder extends Seeder
     {
         // 1. Migrate Defaults
         $goalDefaults = [
-            "Bring a fiancé(e) to the U.S." => "K-1 Fiancé Visa – USCIS Petition only",
-            "Bring a spouse to the U.S." => "Petition for a Spouse outside the U.S. – USCIS Petition only",
-            "Bring a sibling to the U.S." => "Petition for a Sibling outside the U.S. – USCIS Petition only",
             "Replace or fix a Green Card" => "Renew or Replace Permanent Resident Card (Green Card Renewal / I-90)",
             "DACA (Deferred Action) — Renewal" => "DACA Renewal (Deferred Action for Childhood Arrivals)",
             "Apply for U.S. Citizenship (Naturalization)" => "Application for U.S. Citizenship (Naturalization / N-400)",
@@ -251,11 +249,14 @@ class SignupPathwaysSeeder extends Seeder
 
         // 2. Migrate Conditionals
         $goalConditionals = [
-            "Bring another relative to the U.S." => [
+            "Bring a fiancé(e) or spouse/relative to the U.S." => [
                 'question_index' => 0, // 1st question
                 'mappings' => [
-                    "Child/Step Child" => "Petition for a Child outside the U.S. – USCIS Petition only",
-                    "Parent" => "Petition for a Parent outside the U.S. – USCIS Petition only"
+                    "Fiancé(e)" => "K-1 Fiancé Visa – USCIS Petition only",
+                    "Spouse" => "Petition for a Spouse outside the U.S. – USCIS Petition only",
+                    "Child / Stepchild" => "Petition for a Child outside the U.S. – USCIS Petition only",
+                    "Parent" => "Petition for a Parent outside the U.S. – USCIS Petition only",
+                    "Sibling" => "Petition for a Sibling outside the U.S. – USCIS Petition only"
                 ]
             ],
             "Adjust status to permanent resident / get a Green Card while in US" => [
@@ -270,15 +271,16 @@ class SignupPathwaysSeeder extends Seeder
 
         foreach ($goalConditionals as $goalTitle => $data) {
             $goal = SignupGoal::where('title', $goalTitle)->with('questions')->first();
-            if (!$goal) continue;
-            
-            $qIndex = $data['question_index']; 
+            if (!$goal)
+                continue;
+
+            $qIndex = $data['question_index'];
             $questions = $goal->questions->sortBy('order_index')->values()->toArray();
-            
+
             if (isset($questions[$qIndex])) {
                 $questionId = $questions[$qIndex]['id'];
                 $questionModel = \App\Models\SignupQuestion::find($questionId);
-                
+
                 $mappings = [];
                 foreach ($data['mappings'] as $answer => $serviceTitle) {
                     $service = \App\Models\Service::where('title', $serviceTitle)->first();
@@ -286,7 +288,7 @@ class SignupPathwaysSeeder extends Seeder
                         $mappings[$answer] = $service->id;
                     }
                 }
-                
+
                 if (!empty($mappings)) {
                     $questionModel->update(['service_mappings' => $mappings]);
                 }

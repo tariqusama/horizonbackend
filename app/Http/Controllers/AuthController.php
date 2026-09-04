@@ -68,12 +68,14 @@ class AuthController extends Controller
                 'regex:/\d/',
                 'regex:/[^A-Za-z0-9]/',
             ],
+            'phone' => 'nullable|string',
+            'country' => 'nullable|string',
             'goal' => 'nullable|string',
             'plan' => 'nullable|string',
             'amount' => 'nullable|numeric',
             'addons' => 'nullable|array',
             'questionnaire' => 'nullable|array',
-            'service_id' => 'nullable|string'
+            'service_id' => 'nullable'
         ], [
             'email.unique' => 'Email already exists',
         ]);
@@ -83,6 +85,8 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'phone' => $request->phone,
+            'country' => $request->country,
             'role' => 'user',
         ]);
 
@@ -115,24 +119,39 @@ class AuthController extends Controller
 
         if ($request->goal) {
             $formSlug = 'i-90';
+            $serviceIdToSave = null;
             if ($request->has('service_id') && $request->service_id) {
-                $map = [
-                    'i90' => 'i-90',
-                    'aos' => 'i-485',
-                    'i751' => 'i-751',
-                    'n400' => 'n-400',
-                    'fiance_petition' => 'i-129f',
-                    'spouse' => 'i-130',
-                    'child' => 'i-130',
-                    'parent' => 'i-130',
-                    'sibling' => 'i-130',
-                ];
-                $formSlug = $map[$request->service_id] ?? 'i-90';
+                $serviceId = $request->service_id;
+                if (is_numeric($serviceId)) {
+                    $serviceIdToSave = $serviceId;
+                    $dynamicForm = \App\Models\DynamicForm::whereHas('services', function ($q) use ($serviceId) {
+                        $q->where('services.id', $serviceId);
+                    })->first();
+                    if ($dynamicForm) {
+                        $formSlug = $dynamicForm->slug;
+                    }
+                } else {
+                    $map = [
+                        'i90' => 'i-90',
+                        'aos' => 'i-485',
+                        'i751' => 'i-751',
+                        'n400' => 'n-400',
+                        'fiance_petition' => 'i-129f',
+                        'spouse' => 'i-130',
+                        'child' => 'i-130',
+                        'parent' => 'i-130',
+                        'sibling' => 'i-130',
+                    ];
+                    $formSlug = $map[$serviceId] ?? $serviceId;
+                }
             }
 
             $application = $user->applications()->create([
                 'title' => $request->goal,
+                'package_name' => $request->plan ?? $request->goal,
+                'service_id' => $serviceIdToSave,
                 'amount' => $request->amount,
+                'paid_amount' => $request->amount,
                 'subtitle' => 'Plan: ' . ($request->plan ?? 'Standard') . $addonsString,
                 'status' => 'Active',
                 'progress' => 'Application received',
@@ -196,7 +215,10 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()?->currentAccessToken()?->delete();
+        $token = $request->user()?->currentAccessToken();
+        if ($token && method_exists($token, 'delete')) {
+            $token->delete();
+        }
 
         Auth::guard('web')->logout();
 

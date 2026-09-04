@@ -1,0 +1,130 @@
+{
+    "id": "child_abroad",
+    "title": "Application for Child Abroad",
+    "subtitle": "Petition for Alien Relative (Child)",
+    "description": "sponsoring your child who is currently abroad to come to the United States",
+    "forms": [
+        "G-1145 (E-notification)",
+        "I-130 (Petition for Alien Relative)"
+    ],
+    "totalDocuments": 16,
+    "sections": [
+        {
+            "title": "Petitioner (U.S. Citizen or Green Card Holder) Documents",
+            "documents": [
+                {
+                    "name": "Proof of U.S. citizenship OR green card (front and back)",
+                    "required": true,
+                    "hint": "U.S. citizens: upload your U.S. passport bio page, birth certificate, or Certificate of Naturalization. Green card holders: upload both the front and back of your Permanent Resident Card (I-551 \/ green card)."
+                },
+                {
+                    "name": "Government-issued photo ID",
+                    "required": true,
+                    "hint": "Upload a valid state driver's license, state ID card, or U.S. passport showing your full legal name, date of birth, and photo."
+                }
+            ]
+        },
+        {
+            "title": "Proof of Relationship",
+            "documents": [
+                {
+                    "name": "Child's birth certificate showing sponsoring parent's name",
+                    "required": true,
+                    "hint": "Upload the child's official birth certificate that lists your name as a parent. If the certificate is not in English, include a certified English translation."
+                },
+                {
+                    "name": "If adopted: final adoption decree + proof of legal custody and residency before age 16",
+                    "required": false,
+                    "hint": "For adopted children, upload the final court adoption decree plus documentation proving the child resided with you before their 16th birthday (e.g., school records, medical records at the same address)."
+                },
+                {
+                    "name": "If stepchild: marriage certificate between parent and stepparent + proof of prior marriage terminations",
+                    "required": false,
+                    "hint": "Upload the marriage certificate between the stepparent and the child's biological parent, plus divorce decrees or death certificates for any prior marriages of either party."
+                },
+                {
+                    "name": "Paternal or maternal DNA test result from a USCIS-approved lab",
+                    "required": false,
+                    "hint": "If the parent-child relationship cannot be proven through standard documents, a DNA test from an AABB-accredited laboratory may be used. Contact us before arranging a DNA test to ensure it meets USCIS requirements."
+                }
+            ]
+        },
+        {
+            "title": "At Least Five (5) of the Following \u2014 Required",
+            "documents": [
+                {
+                    "name": "Medical\/health records showing parent and child's names",
+                    "required": false,
+                    "hint": "Examples: hospital birth records, vaccination records, or health insurance cards listing both parent and child's names."
+                },
+                {
+                    "name": "Church or religious records listing parent and child's name",
+                    "required": false,
+                    "hint": "Examples: baptism certificate, church membership or Sunday school enrollment records listing the parent and child."
+                },
+                {
+                    "name": "Insurance records naming both petitioner and beneficiary",
+                    "required": false,
+                    "hint": "Upload insurance policies (health, life, or auto) that list both the petitioner and the child, demonstrating a family relationship."
+                },
+                {
+                    "name": "Employment records showing parent and child's names",
+                    "required": false,
+                    "hint": "Examples: employer benefit enrollment forms listing children as dependents, or HR emergency contact forms listing the child."
+                },
+                {
+                    "name": "Financial records (tax returns) listing parent and child's name",
+                    "required": false,
+                    "hint": "Upload relevant pages from IRS tax returns (Form 1040) that list the child as a dependent."
+                },
+                {
+                    "name": "Census or tribal records in both names",
+                    "required": false,
+                    "hint": "Upload census household records or tribal enrollment documents listing both parent and child."
+                },
+                {
+                    "name": "Government records or ID documents showing names of both",
+                    "required": false,
+                    "hint": "Examples: school enrollment records listing the parent, military records, or any government document that ties the parent and child together."
+                },
+                {
+                    "name": "Proof of ongoing parent-child relationship (money transfers\/remittance)",
+                    "required": false,
+                    "hint": "Upload receipts of money transfers or remittances sent to the child or their caretaker, demonstrating ongoing financial support across borders."
+                }
+            ]
+        },
+        {
+            "title": "Beneficiary (Child) Documents",
+            "documents": [
+                {
+                    "name": "Passport biographic page",
+                    "required": true,
+                    "hint": "Upload a scan of the child's passport page showing their full name, date of birth, nationality, and passport number. The passport should be valid."
+                }
+            ]
+        },
+        {
+            "title": "Any Other Additional Documents (Optional)",
+            "documents": [
+                {
+                    "name": "Marriage certificate, divorce decree, adoption decree, or court order for name changes (if applicable)",
+                    "required": false,
+                    "hint": "Upload any documents that explain name discrepancies or changes in family circumstances relevant to the child's petition."
+                },
+                {
+                    "name": "Custom Document 1",
+                    "required": false
+                },
+                {
+                    "name": "Custom Document 2",
+                    "required": false
+                },
+                {
+                    "name": "Custom Document 3",
+                    "required": false
+                }
+            ]
+        }
+    ]
+}

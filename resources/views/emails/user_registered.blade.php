@@ -5,7 +5,7 @@ Hello {{ $user->name }},
 
 Thank you for registering. We are excited to help you achieve your goals.
 
-<x-mail::button :url="config('app.url')">
+<x-mail::button :url="env('FRONTEND_URL', 'https://horizonpathways.us') . '/login'">
 Visit Dashboard
 </x-mail::button>
 
