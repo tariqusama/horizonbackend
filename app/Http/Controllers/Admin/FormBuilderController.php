@@ -214,4 +214,40 @@ class FormBuilderController extends Controller
         DynamicFormQuestion::destroy($id);
         return response()->json(['success' => true]);
     }
+
+    // POST /api/admin/guide-engine/forms/{id}/import-pdf-fields
+    public function importPdfFields(Request $request, $id)
+    {
+        $form = DynamicForm::findOrFail($id);
+        
+        $validated = $request->validate([
+            'sections' => 'required|array',
+            'sections.*.title' => 'required|string',
+            'sections.*.questions' => 'required|array',
+            'sections.*.questions.*.question_text' => 'required|string',
+            'sections.*.questions.*.field_name' => 'required|string',
+            'sections.*.questions.*.field_type' => 'required|string',
+        ]);
+
+        $startOrder = $form->sections()->count();
+
+        foreach ($validated['sections'] as $secIndex => $secData) {
+            $section = $form->sections()->create([
+                'title' => $secData['title'],
+                'order' => $startOrder + $secIndex
+            ]);
+
+            foreach ($secData['questions'] as $qIndex => $qData) {
+                $section->questions()->create([
+                    'question_text' => $qData['question_text'],
+                    'field_name' => $qData['field_name'],
+                    'field_type' => $qData['field_type'],
+                    'is_required' => false,
+                    'order' => $qIndex
+                ]);
+            }
+        }
+
+        return response()->json(['success' => true]);
+    }
 }

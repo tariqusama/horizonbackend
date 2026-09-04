@@ -170,6 +170,7 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::post('/guide-engine/forms/{id}/toggle-required', [\App\Http\Controllers\Admin\FormBuilderController::class, 'toggleRequired']);
     Route::get('/guide-engine/forms/{id}', [\App\Http\Controllers\Admin\FormBuilderController::class, 'getForm']);
     Route::post('/guide-engine/forms/{id}/sections', [\App\Http\Controllers\Admin\FormBuilderController::class, 'addSection']);
+    Route::post('/guide-engine/forms/{id}/import-pdf-fields', [\App\Http\Controllers\Admin\FormBuilderController::class, 'importPdfFields']);
     Route::put('/guide-engine/forms/{id}/reorder-sections', [\App\Http\Controllers\Admin\FormBuilderController::class, 'reorderSections']);
     Route::post('/guide-engine/sections/{id}/questions', [\App\Http\Controllers\Admin\FormBuilderController::class, 'addQuestion']);
     Route::put('/guide-engine/sections/{id}/reorder-questions', [\App\Http\Controllers\Admin\FormBuilderController::class, 'reorderQuestions']);
