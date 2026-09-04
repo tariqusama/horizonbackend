@@ -202,6 +202,17 @@ class FormBuilderController extends Controller
         return response()->json(['success' => true]);
     }
 
+    // PUT /api/admin/guide-engine/sections/{id}
+    public function updateSection(Request $request, $id)
+    {
+        $section = DynamicFormSection::findOrFail($id);
+        $validated = $request->validate([
+            'title' => 'required|string|max:255'
+        ]);
+        $section->update($validated);
+        return response()->json($section);
+    }
+
     // DELETE endpoints
     public function deleteSection($id)
     {
