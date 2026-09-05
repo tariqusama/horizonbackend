@@ -174,7 +174,7 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::put('/guide-engine/forms/{id}/reorder-sections', [\App\Http\Controllers\Admin\FormBuilderController::class, 'reorderSections']);
     Route::post('/guide-engine/sections/{id}/questions', [\App\Http\Controllers\Admin\FormBuilderController::class, 'addQuestion']);
     Route::put('/guide-engine/sections/{id}/reorder-questions', [\App\Http\Controllers\Admin\FormBuilderController::class, 'reorderQuestions']);
-    Route::put('/guide-engine/sections/{id}', [\App\Http\Controllers\Admin\FormBuilderController::class, 'updateSection']);
+    Route::post('/guide-engine/sections/{id}/update', [\App\Http\Controllers\Admin\FormBuilderController::class, 'updateSection']);
     Route::delete('/guide-engine/sections/{id}', [\App\Http\Controllers\Admin\FormBuilderController::class, 'deleteSection']);
     Route::put('/guide-engine/questions/{id}', [\App\Http\Controllers\Admin\FormBuilderController::class, 'updateQuestion']);
     Route::delete('/guide-engine/questions/{id}', [\App\Http\Controllers\Admin\FormBuilderController::class, 'deleteQuestion']);
