@@ -239,6 +239,8 @@ class FormBuilderController extends Controller
             'sections.*.questions.*.field_name' => 'required|string',
             'sections.*.questions.*.field_type' => 'required|string',
             'sections.*.questions.*.options' => 'nullable|array',
+            'sections.*.questions.*.options.*.label' => 'nullable|string',
+            'sections.*.questions.*.options.*.value' => 'nullable|string',
         ]);
 
         $startOrder = $form->sections()->count();
@@ -260,9 +262,11 @@ class FormBuilderController extends Controller
 
                 if (!empty($qData['options']) && is_array($qData['options'])) {
                     foreach ($qData['options'] as $oIndex => $opt) {
+                        $label = isset($opt['label']) ? substr($opt['label'], 0, 250) : 'Option';
+                        $value = isset($opt['value']) ? substr($opt['value'], 0, 250) : 'option';
                         $question->options()->create([
-                            'option_label' => $opt['label'],
-                            'option_value' => $opt['value'],
+                            'option_label' => $label,
+                            'option_value' => $value,
                             'order' => $oIndex
                         ]);
                     }
