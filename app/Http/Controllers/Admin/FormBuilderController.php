@@ -226,6 +226,24 @@ class FormBuilderController extends Controller
         return response()->json(['success' => true]);
     }
 
+    // DELETE /api/admin/guide-engine/forms/{id}
+    public function deleteForm($id)
+    {
+        $form = DynamicForm::findOrFail($id);
+        // Detach all service associations first
+        $form->services()->detach();
+        // Cascade delete: sections → questions → options (handled by DB foreign keys or manual)
+        foreach ($form->sections as $section) {
+            foreach ($section->questions as $question) {
+                $question->options()->delete();
+            }
+            $section->questions()->delete();
+        }
+        $form->sections()->delete();
+        $form->delete();
+        return response()->json(['success' => true]);
+    }
+
     // POST /api/admin/guide-engine/forms/{id}/import-pdf-fields
     public function importPdfFields(Request $request, $id)
     {

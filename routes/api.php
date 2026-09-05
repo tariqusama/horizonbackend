@@ -178,6 +178,7 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::delete('/guide-engine/sections/{id}', [\App\Http\Controllers\Admin\FormBuilderController::class, 'deleteSection']);
     Route::put('/guide-engine/questions/{id}', [\App\Http\Controllers\Admin\FormBuilderController::class, 'updateQuestion']);
     Route::delete('/guide-engine/questions/{id}', [\App\Http\Controllers\Admin\FormBuilderController::class, 'deleteQuestion']);
+    Route::delete('/guide-engine/forms/{id}', [\App\Http\Controllers\Admin\FormBuilderController::class, 'deleteForm']);
 });
 
 Route::post('/payment/process', [\App\Http\Controllers\PaymentController::class, 'processPayment']);
