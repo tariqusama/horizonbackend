@@ -238,6 +238,7 @@ class FormBuilderController extends Controller
             'sections.*.questions.*.question_text' => 'required|string',
             'sections.*.questions.*.field_name' => 'required|string',
             'sections.*.questions.*.field_type' => 'required|string',
+            'sections.*.questions.*.options' => 'nullable|array',
         ]);
 
         $startOrder = $form->sections()->count();
@@ -249,13 +250,23 @@ class FormBuilderController extends Controller
             ]);
 
             foreach ($secData['questions'] as $qIndex => $qData) {
-                $section->questions()->create([
+                $question = $section->questions()->create([
                     'question_text' => $qData['question_text'],
                     'field_name' => $qData['field_name'],
                     'field_type' => $qData['field_type'],
                     'is_required' => false,
                     'order' => $qIndex
                 ]);
+
+                if (!empty($qData['options']) && is_array($qData['options'])) {
+                    foreach ($qData['options'] as $oIndex => $opt) {
+                        $question->options()->create([
+                            'label' => $opt['label'],
+                            'value' => $opt['value'],
+                            'order' => $oIndex
+                        ]);
+                    }
+                }
             }
         }
 
