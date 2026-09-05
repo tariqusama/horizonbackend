@@ -261,8 +261,8 @@ class FormBuilderController extends Controller
                 if (!empty($qData['options']) && is_array($qData['options'])) {
                     foreach ($qData['options'] as $oIndex => $opt) {
                         $question->options()->create([
-                            'label' => $opt['label'],
-                            'value' => $opt['value'],
+                            'option_label' => $opt['label'],
+                            'option_value' => $opt['value'],
                             'order' => $oIndex
                         ]);
                     }
